@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/CedricLo/ResIoT/issues"
   },
-  "homepage": "https://github.com/CedricLo/ResIoT#readme"
+  "homepage": "https://github.com/CedricLo/ResIoT#readme",
+  "dependencies": {
+    "socket-client": "^1.0.0",
+    "socket.io": "^4.4.1"
+  }
 }
