@@ -1,7 +1,6 @@
 import ButtonAllumerEteindre from "./ButtonAllumerEteindre";
 import ButtonAccelerer from "./ButtonAccelerer";
 import ButtonRalentir from "./ButtonRalentir";
-import "./styles.css";
 import ButtonDirection from "./ButtonDirection";
 import React from "react";
 
