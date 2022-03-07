@@ -1,4 +1,5 @@
 import React from "react";
+const requete = require("./requetes");
 
 export default class ButtonAccelerer extends React.Component {
   vitesse = this.props.vitesse;
@@ -13,6 +14,7 @@ export default class ButtonAccelerer extends React.Component {
     if (this.props.vitesse < 5) {
       const vitesse = this.props.vitesse + 1;
       this.vitesseChange(vitesse);
+      requete.postChenillardState();
     }
     console.log(this.props.vitesse);
   }
