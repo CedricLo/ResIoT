@@ -6,21 +6,30 @@ module.exports={
      * PUT :
      */
 
-    postChenillardState : function(){
+    postChenillardState : function(etat,vitesse,sens){
         fetch('https://22a6-77-204-105-233.ngrok.io',{
             method : 'POST',
             mode : 'cors',
-            body :chenillardState(true,1,"droite"), 
+            body : chenillardState(etat,vitesse,sens), 
         }
         
-        ).then(console.log("requete executée"))
+        ).then(res => res.json())
+        .then(data => {
+          console.log(data);
+        })
+        .catch(rejected => {
+            console.log(rejected);
+        });
     },
     
 
 }
 
 function chenillardState(etat,vitesse,sens){
-        return JSON.stringify({chenillard : {etat : etat, vitesse : vitesse, sens : sens
+        return JSON.stringify({chenillard : {
+            etat : etat, 
+            vitesse : vitesse, 
+            sens : sens
         },
     })
-    }
+}
