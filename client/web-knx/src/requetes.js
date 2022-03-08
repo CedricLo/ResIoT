@@ -1,3 +1,7 @@
+
+const url = "https://22a6-77-204-105-233.ngrok.io"
+const url2 = "http://127.0.0.1:3030"
+
 module.exports={
     /**
      * GET : 
@@ -7,7 +11,7 @@ module.exports={
      */
 
     postChenillardState : function(etat,vitesse,sens){
-        fetch('https://22a6-77-204-105-233.ngrok.io',{
+        fetch(url2,{
             method : 'POST',
             mode : 'cors',
             body : chenillardState(etat,vitesse,sens), 

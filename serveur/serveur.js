@@ -7,12 +7,13 @@ const port = 3030;
    
 const server = http.createServer((req, res) => {
   res.setHeader('Content-Type', 'text/plain');  
-  res.end('Hello World !!\n');  
+  res.end('Hello World !!\n' + req.url);  
+  requestListener(req, res)
 });
    
 server.listen(port, hostname, () => {  
   console.log(`Server running at http://${hostname}:${port}/`);  
-  requestListener();
+ // requestListener();
 });  
 
 const requestListener = function (req, res) {
