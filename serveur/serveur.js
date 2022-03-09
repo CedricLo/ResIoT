@@ -18,8 +18,18 @@ server.listen(port, hostname, () => {
 const requestListener = function (req, res) {
     switch(req.url){
         case "/" : 
-            res.writeHead(200);
-            res.end("Default response");
+          res.writeHead(200);
+          res.end("Default response");
+          break;
+        
+        case "/sens/droite" :
+          break;
+        case "/sens/gauche" :
+          break;
+        case "/vitesse/plus" :
+          break;
+        case "/vitesse/moins" :
+          break;
 
     }
 }
