@@ -1,5 +1,5 @@
 
-const url = "https://22a6-77-204-105-233.ngrok.io"
+const url = "https://c1e4-148-60-140-218.ngrok.io/"
 const url2 = "http://127.0.0.1:3030"
 
 module.exports={
@@ -11,14 +11,12 @@ module.exports={
      */
 
     postChenillardState : function(etat,vitesse,sens){
-        fetch(url2,{
+        fetch(url,{
             method : 'POST',
-            mode : 'cors',
+            headers: { 'Content-Type': 'application/json' },
             body : chenillardState(etat,vitesse,sens), 
-        }
-        
-        ).then(res => res.json())
-        .then(data => {
+            mode : 'no-cors'
+        }).then(data => {
           console.log(data);
         })
         .catch(rejected => {
@@ -30,10 +28,10 @@ module.exports={
 }
 
 function chenillardState(etat,vitesse,sens){
-        return JSON.stringify({chenillard : {
-            etat : etat, 
-            vitesse : vitesse, 
-            sens : sens
+        return {chenillard : {
+            "etat" : etat, 
+            "vitesse" : vitesse, 
+            "sens" : sens
         },
-    })
+    }
 }
