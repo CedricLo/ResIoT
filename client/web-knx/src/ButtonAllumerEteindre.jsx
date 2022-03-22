@@ -24,9 +24,9 @@ export default class ButtonAllumerEteindre extends React.Component {
     const allumer = "Allumer le chenillard";
     const eteindre = "Eteindre le chenillard";
     if (this.props.etat) {
-      this.setState({ button: { nameButton: eteindre } });
-    } else {
       this.setState({ button: { nameButton: allumer } });
+    } else {
+      this.setState({ button: { nameButton: eteindre } });
     }
     this.changeEtat(!this.props.etat);
     console.log(this.props.etat);

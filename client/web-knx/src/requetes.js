@@ -2,6 +2,9 @@
 const url = "https://22a6-77-204-105-233.ngrok.io"
 const url2 = "http://127.0.0.1:3030"
 
+const axios = require('axios');
+
+
 module.exports={
     /**
      * GET : 
@@ -11,12 +14,19 @@ module.exports={
      */
 
     postChenillardState : function(etat,vitesse,sens){
+    /*axios({
+            method: 'post',
+            url: url,
+            mode: 'cors',
+            data: chenillardState(etat,vitesse,sens)
+        }).then(data => console.log(data))
+        .catch(err => console.log(err))*/
+        
         fetch(url2,{
             method : 'POST',
             mode : 'cors',
             body : chenillardState(etat,vitesse,sens), 
         }
-        
         ).then(res => res.json())
         .then(data => {
           console.log(data);
@@ -24,6 +34,7 @@ module.exports={
         .catch(rejected => {
             console.log(rejected);
         });
+        
     },
     
 
