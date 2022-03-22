@@ -14,6 +14,7 @@ const server = http.createServer((req, res) => {
 
 
 const requestListener = function (req, res) {
+
   //console.log( req )
   if (req.method === 'POST') {
     console.log(req.body)
@@ -23,7 +24,7 @@ const requestListener = function (req, res) {
         console.log('chunk',chunk) // convert Buffer to string
     });
     req.on('end', () => {
-        console.log('body' , body.toString("utf8"));
+        console.log('body' , JSON.stringify(body));
         res.end('ok');
     });
 }
