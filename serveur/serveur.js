@@ -7,23 +7,34 @@ const port = 3030;
    
 const server = http.createServer((req, res) => {
   res.setHeader('Content-Type', 'text/plain');  
-  res.end('Hello World !!\n' + req.url);  
   requestListener(req, res)
-});
-   
-server.listen(port, hostname, () => {  
+}).listen(port, hostname, () => {  
   console.log(`Server running at http://${hostname}:${port}/`);  
- // requestListener();
 });  
 
+
 const requestListener = function (req, res) {
+  //console.log( req )
+  if (req.method === 'POST') {
+    console.log(req.body)
+    let body = [];
+    req.on('data', chunk => {
+        body.push(chunk);
+        console.log('chunk',chunk) // convert Buffer to string
+    });
+    req.on('end', () => {
+        console.log('body' , body.toString("utf8"));
+        res.end('ok');
+    });
+}
     switch(req.url){
         case "/" : 
           res.writeHead(200);
-          res.end("Default response");
+          res.end("Default response"+req.body);
+          //console.log(req.body);
           break;
-        
         case "/sens/droite" :
+          res.end("Sens droite");
           break;
         case "/sens/gauche" :
           break;
@@ -35,4 +46,4 @@ const requestListener = function (req, res) {
     }
 }
 
-https://stackoverflow.com/questions/7042340/error-cant-set-headers-after-they-are-sent-to-the-client
+//stackoverflow.com/questions/7042340/error-cant-set-headers-after-they-are-sent-to-the-client
