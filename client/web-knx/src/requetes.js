@@ -1,8 +1,8 @@
 
 const url = "https://c1e4-148-60-140-218.ngrok.io/"
-const url2 = "http://127.0.0.1:3030"
+const url2 = "http://127.0.0.1:3001"
 
-const axios = require('axios');
+//const axios = require('axios');
 
 
 module.exports={
@@ -25,7 +25,8 @@ module.exports={
         fetch(url2,{
             method : 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body : chenillardState(etat,vitesse,sens), 
+            body : chenillardState(etat,vitesse,sens),
+            mode: 'no-cors'
         }
         ).then(res => res.json())
         .then(data => {

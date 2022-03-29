@@ -13,9 +13,15 @@ router.post('/handle',(request,response) => {
 console.log(request.body);
 });
 
-// add router in the Express app.
-app.use("/", router);
+app.get('/',function(req,res) {
+    res.send('Hello world !');
+})
 
 app.listen(3001,() => {
     console.log("Started on PORT 3001");
-    })
+})
+
+app.post('/', (req,res) => {
+    console.log("Got a post");
+    res.send("hello")
+})
