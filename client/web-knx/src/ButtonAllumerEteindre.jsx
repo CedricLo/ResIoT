@@ -1,5 +1,5 @@
 import React from "react";
-
+import './styles/switchStyles.css'
 export default class ButtonAllumerEteindre extends React.Component {
   etat = this.props.etat;
   changeEtat = this.props.changeEtat;
@@ -34,9 +34,15 @@ export default class ButtonAllumerEteindre extends React.Component {
 
   render() {
     return (
-      <button onClick={() => this.allumerChenillard()}>
-        {this.state.button.nameButton}
-      </button>
+      <div>
+        <h1>{this.state.button.nameButton}</h1>
+
+        <input type="checkbox"
+         id="switch" 
+         onChange={() => this.allumerChenillard()}
+         checked = {this.props.etat} />
+        <label for="switch">Toggle</label>
+      </div>
     );
   }
 }
