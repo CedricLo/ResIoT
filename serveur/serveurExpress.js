@@ -4,7 +4,7 @@ const router = express.Router();
 const app = express();
 
 //Here we are configuring express to use body-parser as middle-ware.
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 router.post('/handle',(request,response) => {
@@ -17,11 +17,12 @@ app.get('/',function(req,res) {
     res.send('Hello world !');
 })
 
-app.listen(3001,() => {
-    console.log("Started on PORT 3001");
+app.listen(3030,() => {
+    console.log("Started on PORT 3030");
 })
 
 app.post('/', (req,res) => {
     console.log("Got a post");
+    console.log(req.body);
     res.send("hello")
 })

@@ -6,8 +6,6 @@ import React from "react";
 import './styles/myStyles.css'
 
 const requete = require("./requetes");
-
-
 export default class App extends React.Component {
   state = {
     chenillard: {
@@ -24,8 +22,10 @@ export default class App extends React.Component {
         sens: this.state.chenillard.sens,
         vitesse: this.state.chenillard.vitesse
       }
-    })
+    });
     requete.postChenillardState(this.state.chenillard.stateChenillard,this.state.chenillard.vitesse,this.state.chenillard.sens);
+    console.log("Post Etat : ",this.state.chenillard.stateChenillard);
+
   }
 
   changeVitesse(vit) {
@@ -35,9 +35,7 @@ export default class App extends React.Component {
         sens: this.state.chenillard.sens,
         vitesse: vit
       }
-    })
-    requete.postChenillardState(this.state.chenillard.stateChenillard,this.state.chenillard.vitesse,this.state.chenillard.sens);
-
+    });
   }
 
   changeSens(sens) {
@@ -47,9 +45,10 @@ export default class App extends React.Component {
         sens: sens,
         vitesse: this.state.chenillard.vitesse
       }
-    })
-    requete.postChenillardState(this.state.chenillard.stateChenillard,this.state.chenillard.vitesse,this.state.chenillard.sens);
+    });
   }
+
+  
 
   render() {
     return (

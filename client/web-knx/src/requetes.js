@@ -1,6 +1,6 @@
 
 const url = "https://c1e4-148-60-140-218.ngrok.io/"
-const url2 = "http://127.0.0.1:3001"
+const url2 = "http://127.0.0.1:3030"
 
 //const axios = require('axios');
 
@@ -13,18 +13,10 @@ module.exports={
      * PUT :
      */
 
-    postChenillardState : function(etat,vitesse,sens){
-    /*axios({
-            method: 'post',
-            url: url,
-            mode: 'cors',
-            data: chenillardState(etat,vitesse,sens)
-        }).then(data => console.log(data))
-        .catch(err => console.log(err))*/
-        
+    postChenillardState : function(etat,vitesse,sens){  
         fetch(url2,{
             method : 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Accept' : 'application/json', 'Content-Type': "application/json" },
             body : chenillardState(etat,vitesse,sens),
             mode: 'no-cors'
         }
@@ -33,7 +25,6 @@ module.exports={
           console.log(data);
         })
         .catch(rejected => {
-            console.log(rejected);
         });
         
     },
@@ -42,10 +33,10 @@ module.exports={
 }
 
 function chenillardState(etat,vitesse,sens){
-        return {chenillard : {
+        return {
+            "chenillard" : "chenillard",
             "etat" : etat, 
             "vitesse" : vitesse, 
             "sens" : sens
-        },
-    }
+        };
 }
