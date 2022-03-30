@@ -4,6 +4,7 @@ import ButtonRalentir from "./ButtonRalentir";
 import ButtonDirection from "./ButtonDirection";
 import React from "react";
 import './styles/myStyles.css'
+import SliderSpeed from "./SliderSpeed";
 
 const requete = require("./requetes");
 export default class App extends React.Component {
@@ -77,6 +78,12 @@ export default class App extends React.Component {
                 changeEtat={(etat) => {
                   this.changeEtat(etat);
                 }}
+              />
+            </article>
+            <article  className="section">
+              <SliderSpeed
+                vitesse={this.state.chenillard.vitesse}
+                vitesseChange={(vit) => this.changeVitesse(vit)}
               />
             </article>
             <article  className="section">
