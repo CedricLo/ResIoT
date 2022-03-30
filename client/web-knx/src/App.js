@@ -60,7 +60,8 @@ export default class App extends React.Component {
         <header>
           <h1>Jouez avec le chenillard de votre maison!</h1>
         </header>
-        <section>
+        <section className="firstSection">
+          <section className="secondSection">
           <article>
             <h3>
               Chenillard :{" "}
@@ -72,14 +73,16 @@ export default class App extends React.Component {
                 this.state.chenillard.sens}
             </h3>
             </article>
-            <article className="day-forecast">
+            <article >
               <ButtonAllumerEteindre
                 etat={this.state.chenillard.stateChenillard}
                 changeEtat={(etat) => {
                   this.changeEtat(etat);
                 }}
               />
+              
             </article>
+            </section>
             <article  className="section">
               <SliderSpeed
                 vitesse={this.state.chenillard.vitesse}

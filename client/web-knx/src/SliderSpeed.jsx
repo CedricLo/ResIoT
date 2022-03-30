@@ -1,12 +1,13 @@
 import React from "react";
 import Slider from '@mui/material/Slider'; 
+import {Stack,Divider } from '@mui/material';
 
 export default class SliderSpeed extends React.Component {
   vitesse = this.props.vitesse;
   vitesseChange = this.props.vitesseChange;
   state = {
     button: {
-      nameButton: "Accélerer"
+      nameButton: "Vitesse"
     }
   };
 
@@ -26,14 +27,24 @@ export default class SliderSpeed extends React.Component {
     console.log(this.props.vitesse);
   }
 
-  onChange =( value)=>{
-    this.vitesseChange(value)
+  onChange =( event)=>{
+    this.vitesseChange(event.target.value)
   }
 
   render() {
     return (
-
-      <Slider aria-label="Vitesse" value={this.props.vitesse} onChange={this.onChange} />
+      <Stack 
+      spacing={2} direction="column" sx={{ mb: 1 }} alignItems="center">
+        
+          <h1>{this.state.button.nameButton}</h1>
+        
+          <Slider 
+            aria-label="Vitesse" 
+            value={this.props.vitesse} 
+            onChange={this.onChange} 
+            size = "medium"/>
+          
+      </Stack>
     );
   }
 }

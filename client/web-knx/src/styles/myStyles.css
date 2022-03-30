@@ -2,6 +2,15 @@
     color : white;
 }
 
+.firstSection{
+  display: flex;
+  flex-direction: row;
+}
+.secondSection{
+  display: flex;
+  flex-direction: column;
+}
+
 
 section {
     display: flex;
