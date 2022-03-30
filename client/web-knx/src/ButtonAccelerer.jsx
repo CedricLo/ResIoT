@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export default class ButtonAccelerer extends React.Component {
   vitesse = this.props.vitesse;
   vitesseChange = this.props.vitesseChange;

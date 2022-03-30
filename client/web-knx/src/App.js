@@ -4,6 +4,8 @@ import ButtonRalentir from "./ButtonRalentir";
 import ButtonDirection from "./ButtonDirection";
 import React, { Component } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import './styles/myStyles.css'
+import SliderSpeed from "./SliderSpeed";
 
 const client = new W3CWebSocket('ws://127.0.0.1:3030');
 const requete = require("./requetes");
@@ -72,35 +74,62 @@ export default class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Réseau IoT</h1>
-        <h2>Jouez avec le chenillard de votre maison!</h2>
-        <h3>
-          Chenillard :{" "}
-          {" etat : " +
-            this.state.chenillard.stateChenillard +
-            ", \n vitesse : " +
-            this.state.chenillard.vitesse +
-            ", \n sens : " +
-            this.state.chenillard.sens}
-        </h3>
-        <ButtonAllumerEteindre
-          etat={this.state.chenillard.stateChenillard}
-          changeEtat={(etat) => {
-            this.changeEtat(etat);
-          }}
-        />
-        <ButtonAccelerer
-          vitesse={this.state.chenillard.vitesse}
-          vitesseChange={(vit) => this.changeVitesse(vit)}
-        />
-        <ButtonRalentir
-          vitesse={this.state.chenillard.vitesse}
-          vitesseChange={(vit) => this.changeVitesse(vit)}
-        />
-        <ButtonDirection
-          sens={this.state.chenillard.sens}
-          sensChange={(sens) => this.changeSens(sens)}
-        />
+        <header>
+          <h1 className="primary">Réseau IoT</h1>
+          </header>
+        <header>
+          <h1>Jouez avec le chenillard de votre maison!</h1>
+        </header>
+        <section className="firstSection">
+          <section className="secondSection">
+          <article>
+            <h3>
+              Chenillard :{" "}
+              {" etat : " +
+                this.state.chenillard.stateChenillard +
+                ", \n vitesse : " +
+                this.state.chenillard.vitesse +
+                ", \n sens : " +
+                this.state.chenillard.sens}
+            </h3>
+            </article>
+            <article >
+              <ButtonAllumerEteindre
+                etat={this.state.chenillard.stateChenillard}
+                changeEtat={(etat) => {
+                  this.changeEtat(etat);
+                }}
+              />
+              
+            </article>
+            </section>
+            <article  className="section">
+              <SliderSpeed
+                vitesse={this.state.chenillard.vitesse}
+                vitesseChange={(vit) => this.changeVitesse(vit)}
+              />
+            </article>
+            <article  className="section">
+              <ButtonAccelerer
+                vitesse={this.state.chenillard.vitesse}
+                vitesseChange={(vit) => this.changeVitesse(vit)}
+              />
+            </article>
+            <article  className="day-forecast">
+              <ButtonRalentir
+                vitesse={this.state.chenillard.vitesse}
+                vitesseChange={(vit) => this.changeVitesse(vit)}
+              />
+            </article>
+            
+            <article  className="day-forecast">
+              <ButtonDirection
+                sens={this.state.chenillard.sens}
+                sensChange={(sens) => this.changeSens(sens)}
+              />
+            </article>
+          
+          </section>
       </div>
     );
   }
