@@ -61,8 +61,7 @@ export default class App extends React.Component {
           <h1>Jouez avec le chenillard de votre maison!</h1>
         </header>
         <section className="firstSection">
-          <section className="secondSection">
-          <article>
+        <article>
             <h3>
               Chenillard :{" "}
               {" etat : " +
@@ -73,6 +72,8 @@ export default class App extends React.Component {
                 this.state.chenillard.sens}
             </h3>
             </article>
+          <section className="secondSection">
+          
             <article >
               <ButtonAllumerEteindre
                 etat={this.state.chenillard.stateChenillard}
@@ -80,34 +81,22 @@ export default class App extends React.Component {
                   this.changeEtat(etat);
                 }}
               />
-              
             </article>
-            </section>
-            <article  className="section">
-              <SliderSpeed
-                vitesse={this.state.chenillard.vitesse}
-                vitesseChange={(vit) => this.changeVitesse(vit)}
-              />
-            </article>
-            <article  className="section">
-              <ButtonAccelerer
-                vitesse={this.state.chenillard.vitesse}
-                vitesseChange={(vit) => this.changeVitesse(vit)}
-              />
-            </article>
-            <article  className="day-forecast">
-              <ButtonRalentir
-                vitesse={this.state.chenillard.vitesse}
-                vitesseChange={(vit) => this.changeVitesse(vit)}
-              />
-            </article>
-            
             <article  className="day-forecast">
               <ButtonDirection
                 sens={this.state.chenillard.sens}
                 sensChange={(sens) => this.changeSens(sens)}
               />
             </article>
+          </section>
+            <article id="vitesse"  className="section">
+              <SliderSpeed
+                vitesse={this.state.chenillard.vitesse}
+                vitesseChange={(vit) => this.changeVitesse(vit)}
+              />
+            </article>
+                        
+            
           
           </section>
       </div>

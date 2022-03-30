@@ -4,11 +4,11 @@
 
 .firstSection{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .secondSection{
   display: flex;
-  flex-direction: column;
+  flex-direction: row ;
 }
 
 
@@ -42,7 +42,8 @@ section {
   }
 
   article {
-    padding: 10px;
+    padding: 5px;
     margin: 10px;
     background: aqua;
   }
+
