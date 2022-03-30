@@ -1,28 +1,27 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const router = express.Router();
-const app = express();
-
-//Here we are configuring express to use body-parser as middle-ware.
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-router.post('/handle',(request,response) => {
-//code to perform particular action.
-//To access POST variable use req.body()methods.
-console.log(request.body);
+const webSocketsServerPort = 3030;
+const webSocketServer = require('websocket').server;
+const http = require('http');
+// Spinning the http server and the websocket server.
+const server = http.createServer();
+server.listen(webSocketsServerPort);
+const wsServer = new webSocketServer({
+  httpServer: server
 });
 
-app.get('/',function(req,res) {
-    res.send('Hello world !');
-})
+// I'm maintaining all active connections in this object
+const clients = {};
 
-app.listen(3030,() => {
-    console.log("Started on PORT 3030");
-})
+// This code generates unique userid for everyuser.
+const getUniqueID = () => {
+  const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  return s4() + s4() + '-' + s4();
+};
 
-app.post('/', (req,res) => {
-    console.log("Got a post");
-    console.log(req.body);
-    res.send("hello")
-})
+wsServer.on('request', function(request) {
+  var userID = getUniqueID();
+  console.log((new Date()) + ' Recieved a new connection from origin ' + request.origin + '.');
+  // You can rewrite this part of the code to accept only the requests from allowed origin
+  const connection = request.accept(null, request.origin);
+  clients[userID] = connection;
+  console.log('connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients))
+});
