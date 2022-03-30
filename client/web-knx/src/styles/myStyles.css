@@ -37,7 +37,6 @@ section {
   h1 {
     text-align: center;
     color: white;
-    line-height: 100px;
     margin: 0;
   }
 
@@ -45,5 +44,6 @@ section {
     padding: 5px;
     margin: 10px;
     background: aqua;
+    
   }
 

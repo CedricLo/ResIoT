@@ -1,12 +1,13 @@
 import ButtonAllumerEteindre from "./ButtonAllumerEteindre";
-import ButtonAccelerer from "./ButtonAccelerer";
-import ButtonRalentir from "./ButtonRalentir";
+// import ButtonAccelerer from "./ButtonAccelerer";
+// import ButtonRalentir from "./ButtonRalentir";
 import ButtonDirection from "./ButtonDirection";
 import React, { Component } from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import './styles/myStyles.css'
 import SliderSpeed from "./SliderSpeed";
-
+import Elevation from "./RemoteHome";
+import { Stack } from "@mui/material";
 const client = new W3CWebSocket('ws://127.0.0.1:3030');
 const requete = require("./requetes");
 /*
@@ -57,6 +58,7 @@ export default class App extends Component {
         vitesse: vit
       }
     });
+    console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
   changeSens(sens) {
@@ -73,7 +75,10 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <Stack>
+
+        <Elevation/>
+        {/* 
         <header>
           <h1 className="primary">Réseau IoT</h1>
           </header>
@@ -118,8 +123,8 @@ export default class App extends Component {
                         
             
           
-          </section>
-      </div>
+          </section>*/}
+      </Stack>
     );
   }
 }

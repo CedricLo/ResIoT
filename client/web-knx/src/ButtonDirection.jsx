@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "@mui/material";
 
 export default class ButtonDirection extends React.Component {
   //true : droite vers la gauche
@@ -30,9 +31,9 @@ export default class ButtonDirection extends React.Component {
 
   render() {
     return (
-      <button onClick={() => this.changerSensChenillard()}>
+      <Button variant="contained" onClick={() => this.changerSensChenillard()}>
         {this.state.button.nameButton}
-      </button>
+      </Button>
     );
   }
 }

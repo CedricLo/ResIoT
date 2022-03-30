@@ -1,5 +1,8 @@
 import React from "react";
 import './styles/switchStyles.css'
+import { Stack } from "@mui/material";
+
+
 export default class ButtonAllumerEteindre extends React.Component {
   etat = this.props.etat;
   changeEtat = this.props.changeEtat;
@@ -33,7 +36,8 @@ export default class ButtonAllumerEteindre extends React.Component {
 
   render() {
     return (
-      <div>
+      <Stack 
+      spacing={2} direction="column" sx={{ mb: 1 }} alignItems="center">
         <h1>{this.state.button.nameButton}</h1>
 
         <input type="checkbox"
@@ -41,7 +45,7 @@ export default class ButtonAllumerEteindre extends React.Component {
          onChange={() => this.allumerChenillard()}
          checked = {this.props.etat} />
         <label for="switch">Toggle</label>
-      </div>
+      </Stack>
     );
   }
 }

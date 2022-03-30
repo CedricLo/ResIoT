@@ -15,7 +15,8 @@
     "react-scripts": "5.0.0",
     "socket.io-client": "^4.4.1",
     "styled-components": "^5.3.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "websocket": "^1.0.34"
   },
   "scripts": {
     "start": "set PORT=3000 && react-scripts start",
