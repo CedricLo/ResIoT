@@ -2,12 +2,32 @@ import ButtonAllumerEteindre from "./ButtonAllumerEteindre";
 import ButtonAccelerer from "./ButtonAccelerer";
 import ButtonRalentir from "./ButtonRalentir";
 import ButtonDirection from "./ButtonDirection";
-import React from "react";
+import React, { Component } from 'react';
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 import './styles/myStyles.css'
 import SliderSpeed from "./SliderSpeed";
 
+const client = new W3CWebSocket('ws://127.0.0.1:3030');
 const requete = require("./requetes");
-export default class App extends React.Component {
+/*
+const url = "https://c1e4-148-60-140-218.ngrok.io"
+const url2 = "http://127.0.0.1:3030"
+
+var io = require('socket.io-client');*/
+
+
+export default class App extends Component {
+
+  
+  componentWillMount() {
+    client.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+    client.onmessage = (message) => {
+      console.log(message);
+    };
+  }
+
   state = {
     chenillard: {
       stateChenillard: false,
