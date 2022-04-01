@@ -58,9 +58,8 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
-    requete.postChenillardState(this.state.chenillard.stateChenillard,this.state.chenillard.vitesse,this.state.chenillard.sens);
+    client.send('etat', JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
     console.log("Post Etat : ",this.state.chenillard.stateChenillard);
-
   }
 
   changeVitesse(vit) {
