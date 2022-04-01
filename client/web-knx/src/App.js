@@ -19,17 +19,6 @@ var io = require('socket.io-client');*/
 
 
 export default class App extends Component {
-
-  
-  componentWillMount() {
-    client.onopen = () => {
-      console.log('WebSocket Client Connected');
-    };
-    client.onmessage = (message) => {
-      console.log(message);
-    };
-  }
-
   state = {
     chenillard: {
       stateChenillard: false,
@@ -46,7 +35,7 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
-    client.send('etat', JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
+    client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
     console.log("Post Etat : ",this.state.chenillard.stateChenillard);
   }
 
@@ -58,6 +47,7 @@ export default class App extends Component {
         vitesse: vit
       }
     });
+    client.send('C');
     console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
@@ -69,10 +59,20 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
+    client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
   }
 
-  
 
+  constructor() {
+    super()
+    client.onopen = () => {
+      client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
+      console.log('WebSocket Client Connected');
+    };
+    client.onmessage = (message) => {
+      console.log(message);
+    };
+  }
   render() {
     return (
       <Stack>
