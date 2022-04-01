@@ -1,6 +1,24 @@
 import React from "react";
 import Slider from '@mui/material/Slider'; 
-import {Stack,Divider } from '@mui/material';
+import {Stack,Divider, createTheme } from '@mui/material';
+
+
+
+const theme = createTheme({
+  status: {
+    danger: '#e53e3e',
+  },
+  palette: {
+    primary: {
+      main: '#0971f1',
+      darker: '#053e85',
+    },
+    neutral: {
+      main: '#64748B',
+      contrastText: '#fff',
+    },
+  },
+});
 
 export default class SliderSpeed extends React.Component {
   vitesse = this.props.vitesse;
@@ -42,6 +60,7 @@ export default class SliderSpeed extends React.Component {
             aria-label="Vitesse" 
             value={this.props.vitesse} 
             onChange={this.onChange} 
+            color = "secondary"
             size = "medium"/>
           
       </Stack>

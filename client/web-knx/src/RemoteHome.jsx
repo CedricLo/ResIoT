@@ -10,11 +10,11 @@ import ButtonAllumerEteindre from './ButtonAllumerEteindre';
 
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#ff6',
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#00BFFF',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
-  color: "orange"//theme.palette.text.secondary,
+  color: "white"//theme.palette.text.secondary,
 }));
 
 export default class Elevation extends Component {
