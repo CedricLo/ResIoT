@@ -14,8 +14,8 @@ export default class ButtonDirection extends React.Component {
 
   changerSensChenillard() {
     this.sendChangerSens();
-    const versGauche = "vers la gauche";
-    const versDroite = "vers la droite";
+    const versGauche = "gauche";
+    const versDroite = "droite";
 
     if (this.props.sens === versDroite) {
       this.changeSens(versGauche);

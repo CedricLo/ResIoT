@@ -34,7 +34,7 @@ export default class App extends Component {
   state = {
     chenillard: {
       stateChenillard: false,
-      sens: "vers la gauche",
+      sens: "gauche",
       vitesse: 1
     }
   };
@@ -59,7 +59,7 @@ export default class App extends Component {
         vitesse: vit
       }
     });
-    client.send('C');
+    client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
     console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
@@ -71,7 +71,7 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
-    client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
+    client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
   }
 
 
