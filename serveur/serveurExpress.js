@@ -2,8 +2,7 @@
 const WebSocketServer = require('ws');
  
 // Creating a new websocket server
-const wss = new WebSocketServer.Server({ port: 3030 })
- 
+const wss = new WebSocketServer.Server({ address : "127.0.0.1" ,port: 3030 })
 // Creating connection using websocket
 wss.on("connection", ws => {
     console.log("new client connected");
