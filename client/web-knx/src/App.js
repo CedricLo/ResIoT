@@ -8,6 +8,7 @@ import './styles/myStyles.css'
 import SliderSpeed from "./SliderSpeed";
 import Elevation from "./RemoteHome";
 import { Stack } from "@mui/material";
+
 const client = new W3CWebSocket('ws://127.0.0.1:3030');
 const requete = require("./requetes");
 /*
@@ -45,9 +46,8 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
-    requete.postChenillardState(this.state.chenillard.stateChenillard,this.state.chenillard.vitesse,this.state.chenillard.sens);
+    client.send('etat', JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
     console.log("Post Etat : ",this.state.chenillard.stateChenillard);
-
   }
 
   changeVitesse(vit) {

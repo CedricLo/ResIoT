@@ -25,3 +25,7 @@ wsServer.on('request', function(request) {
   clients[userID] = connection;
   console.log('connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients))
 });
+
+wsServer.on('etat', (data) => {
+  console.log(JSON.parse(data));
+})
