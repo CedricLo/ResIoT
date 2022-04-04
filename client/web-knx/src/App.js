@@ -95,6 +95,7 @@ export default class App extends Component {
                 this.state.chenillard.vitesse +
                 ", \n sens : " +
                 this.state.chenillard.sens}
+                
             </Item>
         </Grid>
         <Grid item xs={6}>
