@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "app-knx",
+    "slug": "app-knx",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "app-knx"
+}
