@@ -13,7 +13,6 @@ export default class ButtonDirection extends React.Component {
   };
 
   changerSensChenillard() {
-    this.sendChangerSens();
     const versGauche = "gauche";
     const versDroite = "droite";
 
@@ -25,9 +24,6 @@ export default class ButtonDirection extends React.Component {
     console.log(this.props.sens);
   }
 
-  sendChangerSens() {
-    //Ecrire la fonction qui envoie au serveur le message pour changer le sens
-  }
 
   render() {
     return (

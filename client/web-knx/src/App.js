@@ -12,13 +12,7 @@ import SliderSpeed from './SliderSpeed';
 import ButtonDirection from './ButtonDirection'
 import ButtonAllumerEteindre from './ButtonAllumerEteindre';
 
-const client = new W3CWebSocket('ws://127.0.0.1:3030');
-const requete = require("./requetes");
-/*
-const url = "https://c1e4-148-60-140-218.ngrok.io"
-const url2 = "http://127.0.0.1:3030"
-
-var io = require('socket.io-client');*/
+const client = new W3CWebSocket('ws://6ff3-148-60-65-167.ngrok.io/');
 
 
 const Item = styled(Paper)(({ theme }) => ({
