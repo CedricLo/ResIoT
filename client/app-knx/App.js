@@ -111,7 +111,9 @@ export default class App extends Component {
           <SliderSpeed
               vitesse={this.state.chenillard.vitesse}
               vitesseChange={(vit) => this.changeVitesse(vit)}
+              
             />
+
           </View> 
     </View>
 
