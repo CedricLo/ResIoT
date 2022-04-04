@@ -1,0 +1,50 @@
+.primary {
+    color : white;
+}
+
+.firstSection{
+  display: flex;
+  flex-direction: column;
+}
+.secondSection{
+  display: flex;
+  flex-direction: row ;
+}
+
+
+section {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  article {
+    display: flex;
+    flex: 200px;
+  }
+
+  html {
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+    background-color: purple;
+  }
+
+  header {
+    background: orange;
+    height: 100px;
+  }
+
+  h1 {
+    text-align: center;
+    color: white;
+    margin: 0;
+  }
+
+  article {
+    padding: 5px;
+    margin: 10px;
+    background: aqua;
+    
+  }
+
