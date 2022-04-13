@@ -47,8 +47,8 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
-    client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
-    console.log("Post Etat : ",this.state.chenillard.stateChenillard);
+    client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
+    console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
   }
 
   changeVitesse(vit) {
@@ -81,10 +81,25 @@ export default class App extends Component {
       client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
       console.log('WebSocket Client Connected');
     };
+    
     client.onmessage = (message) => {
-      console.log(message);
+      let parsedMessage = JSON.parse(message.data);
+      if(parsedMessage.state != undefined) {
+        console.log('Server responsed : State ' + parsedMessage.state);
+      }
+      else if(parsedMessage.speed != undefined) {
+        console.log('Server responsed : Speed ' + parsedMessage.speed);
+      }
+      else if(parsedMessage.sens != undefined) {
+        console.log('Server responsed : Sens ' + parsedMessage.sens);
+      }
+      else {
+          console.log(`Unrecognized message`)
+      }
     };
   }
+
+
   render() {
     return (
       <Stack>
