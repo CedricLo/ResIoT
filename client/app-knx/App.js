@@ -6,8 +6,10 @@ import ButtonAllumerEteindre from './components/ButtonAllumerEteindre';
 import ButtonDirection from './components/ButtonDirection';
 import SliderSpeed from './components/SliderSpeed';
 
-const client = new W3CWebSocket('ws://6ff3-148-60-65-167.ngrok.io/');
-
+const lien = '://21df-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io';
+//const httpLien = 'https'+lien+ '/home';
+const httpLien = 'https://21df-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io/home';
+const client = new W3CWebSocket('ws'+lien);
 
 export default class App extends Component {
   state = {
@@ -26,8 +28,9 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
-    client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
-    console.log("Post Etat : ",this.state.chenillard.stateChenillard);
+    client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
+    this.httpPost({'state' : !this.state.chenillard.stateChenillard});
+    //console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
   }
 
   changeVitesse(vit) {
@@ -38,8 +41,9 @@ export default class App extends Component {
         vitesse: vit
       }
     });
-    client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
-    console.log("Post Vitesse : ",this.state.chenillard.vitesse);
+    //client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
+    this.httpPost({'speed' : this.state.chenillard.vitesse});
+    //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
   changeSens(sens) {
@@ -50,9 +54,23 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
-    client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
-  }
+  //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
+  this.httpPost({'sens' : this.state.chenillard.sens});
+}
 
+  
+  /**
+  * Creating HTTP client
+  */
+  httpPost(data) {
+    fetch("http://localhost:8080/home", {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(response => response)
+    .then(data => console.log(data));
+    console.log("POST : ", data)
+  }
 
   constructor() {
     super()
