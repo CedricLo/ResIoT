@@ -12,7 +12,7 @@ import SliderSpeed from './SliderSpeed';
 import ButtonDirection from './ButtonDirection'
 import ButtonAllumerEteindre from './ButtonAllumerEteindre';
 
-const client = new W3CWebSocket('ws://6ff3-148-60-65-167.ngrok.io/');
+const client = new W3CWebSocket('ws://95cd-148-60-78-83.ngrok.io/');
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -54,7 +54,7 @@ export default class App extends Component {
       }
     });
     client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
-    console.log("Post Vitesse : ",this.state.chenillard.vitesse);
+    console.log("Post Vitesse : ", this.state.chenillard.vitesse);
   }
 
   changeSens(sens) {
