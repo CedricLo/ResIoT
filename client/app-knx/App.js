@@ -61,7 +61,19 @@ export default class App extends Component {
       console.log('WebSocket Client Connected');
     };
     client.onmessage = (message) => {
-      console.log(message);
+      let parsedMessage = JSON.parse(message.data);
+      if(parsedMessage.state != undefined) {
+        console.log('Server responsed : State ' + parsedMessage.state);
+      }
+      else if(parsedMessage.speed != undefined) {
+        console.log('Server responsed : Speed ' + parsedMessage.speed);
+      }
+      else if(parsedMessage.sens != undefined) {
+        console.log('Server responsed : Sens ' + parsedMessage.sens);
+      }
+      else {
+          console.log(`Unrecognized message`)
+      }
     };
   }
   render() {
