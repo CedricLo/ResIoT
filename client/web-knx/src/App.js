@@ -11,11 +11,13 @@ import Grid from '@mui/material/Grid';
 import SliderSpeed from './SliderSpeed';
 import ButtonDirection from './ButtonDirection'
 import ButtonAllumerEteindre from './ButtonAllumerEteindre';
+import StateBar from './StateBar';
 
 //const fetch = require('node-fetch');
 
-const lien = '://dc30-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io';
-const httpLien = 'https'+lien+':8080';
+const lien = '://21df-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io';
+//const httpLien = 'https'+lien+ '/home';
+const httpLien = 'https://21df-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io/home';
 const client = new W3CWebSocket('ws'+lien);
 
 
@@ -79,12 +81,11 @@ export default class App extends Component {
    * Creating HTTP client
    */
   httpPost(data) {
-    fetch(httpLien, {
+    fetch("http://localhost:8080/home", {
       method: 'POST',
-      mode: 'no-cors',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
-    }).then(response => response.json())
+    }).then(response => response)
     .then(data => console.log(data));
     console.log("POST : ", data)
   }
@@ -127,6 +128,8 @@ export default class App extends Component {
           <Item>Controle Your Chenillard</Item>
       <Grid item xs={20}>
           <Item>
+            <StateBar etat={(this.state.chenillard.stateChenillard ? true : false)}
+            />
               Chenillard :{" "}
               {" etat : " +
                 (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +

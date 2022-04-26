@@ -1,10 +1,13 @@
 var express = require('express');
+const bodyParser = require("body-parser");
 var app = express();
 var fs = require("fs");
 const { client } = require('websocket');
 // Importing the required modules
 const WebSocketServer = require('ws');
  //127.0.0.1
+ const cors = require('cors')
+
 
  /**
   * Chenillard initialisation
@@ -32,14 +35,25 @@ const WebSocketServer = require('ws');
 
 var knxChenillard = new Chenillard(false,1,'gauche');
 
+app.use(express.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors())
+
+app.post('/home', (req,res) => {
+    console.log('POST REQUETE /home : ',req);
+    console.log('DATA',req.body);
+    res.send('Ok')
+    broadcast(req.body)
+})
 
 app.post('/', (req,res) => {
-    console.log('REQUETE',req);
-    console.log('DATA',req.data);
-    res.send('Ok')
-    wss.clients.forEach(function each(client) {
-        client.send(JSON.stringify(JSON.parse(req.body)));
-    });
+    console.log('POST REQUETE / : ',req);
+    console.log('DATA',req.body);
+    res.send('200')
+})
+
+app.get('/', (req,res) => {
+    console.log('GET REQUEST / : ', req);
 })
 
 //Creating an HTTP server
@@ -55,6 +69,13 @@ var server = app.listen(8080, function () {
 
 // Creating a new websocket server
 const wss = new WebSocketServer.Server({ address : "https://dc30-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io" ,port: 3030 });
+
+function broadcast(data){
+    wss.clients.forEach(function each(client) {
+        client.send(JSON.stringify(data));
+    });
+}
+
 
 wss.getUniqueID = function () {
     function s4() {
@@ -72,6 +93,7 @@ wss.on("connection", ws => {
     wss.clients.forEach(function each(client) {
         console.log('Client.ID: ' + client.id);
     });*/
+
 
     ws.on("message", data => {
         console.log(`Client ${ws.id} has sent us: ${data}`)
