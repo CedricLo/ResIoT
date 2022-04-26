@@ -12,7 +12,11 @@ import SliderSpeed from './SliderSpeed';
 import ButtonDirection from './ButtonDirection'
 import ButtonAllumerEteindre from './ButtonAllumerEteindre';
 
-const client = new W3CWebSocket('ws://95cd-148-60-78-83.ngrok.io/');
+//const fetch = require('node-fetch');
+
+const lien = '://dc30-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io';
+const httpLien = 'https'+lien+':8080';
+const client = new W3CWebSocket('ws'+lien);
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -42,7 +46,8 @@ export default class App extends Component {
       }
     });
     client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
-    console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
+    this.httpPost({'state' : !this.state.chenillard.stateChenillard});
+    //console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
   }
 
   changeVitesse(vit) {
@@ -53,8 +58,9 @@ export default class App extends Component {
         vitesse: vit
       }
     });
-    client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
-    console.log("Post Vitesse : ", this.state.chenillard.vitesse);
+    //client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
+    this.httpPost({'speed' : this.state.chenillard.vitesse});
+    //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
   changeSens(sens) {
@@ -65,10 +71,28 @@ export default class App extends Component {
         vitesse: this.state.chenillard.vitesse
       }
     });
-    client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
+    //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
+    this.httpPost({'sens' : this.state.chenillard.sens});
+  }
+
+  /**
+   * Creating HTTP client
+   */
+  httpPost(data) {
+    fetch(httpLien, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(response => response.json())
+    .then(data => console.log(data));
+    console.log("POST : ", data)
   }
 
 
+  /**
+   * Creating and setting listeners of websocket client
+   */
   constructor() {
     super()
     client.onopen = () => {
@@ -78,13 +102,13 @@ export default class App extends Component {
     
     client.onmessage = (message) => {
       let parsedMessage = JSON.parse(message.data);
-      if(parsedMessage.state != undefined) {
+      if(parsedMessage.state !== undefined) {
         console.log('Server responsed : State ' + parsedMessage.state);
       }
-      else if(parsedMessage.speed != undefined) {
+      else if(parsedMessage.speed !== undefined) {
         console.log('Server responsed : Speed ' + parsedMessage.speed);
       }
-      else if(parsedMessage.sens != undefined) {
+      else if(parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
       }
       else {

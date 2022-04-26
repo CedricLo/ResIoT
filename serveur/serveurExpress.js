@@ -1,3 +1,7 @@
+var express = require('express');
+var app = express();
+var fs = require("fs");
+const { client } = require('websocket');
 // Importing the required modules
 const WebSocketServer = require('ws');
  //127.0.0.1
@@ -29,9 +33,28 @@ const WebSocketServer = require('ws');
 var knxChenillard = new Chenillard(false,1,'gauche');
 
 
+app.post('/', (req,res) => {
+    console.log('REQUETE',req);
+    console.log('DATA',req.data);
+    res.send('Ok')
+    wss.clients.forEach(function each(client) {
+        client.send(JSON.stringify(JSON.parse(req.body)));
+    });
+})
+
+//Creating an HTTP server
+var server = app.listen(8080, function () {
+    var host = server.address().address
+    var port = server.address().port
+    console.log("Listening at http://%s:%s", host, port)
+ })
+
+ server.on('upgrade', function (_, socket){
+     console.log('upgrade event fired', socket);
+ });
 
 // Creating a new websocket server
-const wss = new WebSocketServer.Server({ address : "https://6ff3-148-60-65-167.ngrok.io" ,port: 3030 })
+const wss = new WebSocketServer.Server({ address : "https://dc30-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io" ,port: 3030 });
 
 wss.getUniqueID = function () {
     function s4() {
