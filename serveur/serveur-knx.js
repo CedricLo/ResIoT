@@ -8,7 +8,7 @@ module.exports = {
         connection;
     },
 
-    chenillardSpeed: function (speed) {
+    chenillardStart: function (speed) {
         chenillardSpeed(speed);
     },
 
