@@ -120,9 +120,6 @@ export default class App extends Component {
       else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
       }
-      else if(parsedMessage.lamp !== undefined){
-        
-      }
       else {
         console.log(`Unrecognized message`)
       }

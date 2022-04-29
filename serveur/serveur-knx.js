@@ -16,8 +16,9 @@ module.exports = {
         deconnectionKnx()
     },
 
-    chenillardStart: function (speed) {
+    chenillardStart: function (speed,wss) {
         chenillardSpeed(speed);
+        wssLoc = wss;
     },
 
 }
@@ -140,9 +141,16 @@ function chenillardSpeed(speed) {
     }
 }
 
+function broadcast(data) {
+    wss.clients.forEach(function each(client) {
+        client.send(JSON.stringify(data));
+    });
+}
+
 function allumerL1() {
     //light1.switchOn();
     console.log("lampe 1 allumée ");
+    broadcast({ 'lamp': 1, 'lampState' : true })
 
 }
 function allumerL2() {
