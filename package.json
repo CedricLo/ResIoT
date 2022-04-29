@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/CedricLo/ResIoT#readme",
   "dependencies": {
+    "async-exit-hook": "^2.0.1",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "express": "^4.17.3",
+    "knx": "^2.5.2",
     "ngrok": "^4.3.1",
     "socket-client": "^1.0.0",
     "socket.io": "^4.4.1",
