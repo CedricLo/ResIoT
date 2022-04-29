@@ -51,7 +51,7 @@ export default class SliderSpeed extends React.Component {
 
   render() {
     return (
-      <Stack 
+      <Stack style={{marginInline : "20%"}}
       spacing={2} direction="column" sx={{ mb: 1 }} alignItems="center">
         
           <h1>{this.state.button.nameButton}</h1>
@@ -60,7 +60,7 @@ export default class SliderSpeed extends React.Component {
             aria-label="Vitesse" 
             value={this.props.vitesse} 
             onChange={this.onChange} 
-            color = "secondary"
+            color = "primary" 
             size = "medium"/>
           
       </Stack>

@@ -7,7 +7,7 @@ const { client } = require('websocket');
 const WebSocketServer = require('ws');
  //127.0.0.1
  const cors = require('cors')
-
+const wsAddress = "http://localhost:3030"
 
  /**
   * Chenillard initialisation
@@ -40,14 +40,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors())
 
 app.post('/home', (req,res) => {
-    console.log('POST REQUETE /home : ',req);
     console.log('DATA',req.body);
     res.send('Ok')
     broadcast(req.body)
 })
 
 app.post('/', (req,res) => {
-    console.log('POST REQUETE / : ',req);
     console.log('DATA',req.body);
     res.send('200')
 })
@@ -64,11 +62,10 @@ var server = app.listen(8080, function () {
  })
 
  server.on('upgrade', function (_, socket){
-     console.log('upgrade event fired', socket);
  });
 
 // Creating a new websocket server
-const wss = new WebSocketServer.Server({ address : "https://dc30-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io" ,port: 3030 });
+const wss = new WebSocketServer.Server({ address : wsAddress ,port: 3030 });
 
 function broadcast(data){
     wss.clients.forEach(function each(client) {
@@ -118,7 +115,6 @@ wss.on("connection", ws => {
 
     ws.on("close", () => {
         console.log("Client disconnected");
-        console.log(wss.clients);
     });
 
     ws.onerror = function () {

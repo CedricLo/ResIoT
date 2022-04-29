@@ -7,7 +7,12 @@ import { IconContext } from "react-icons";
 export default class StateBar extends React.Component {
   etat = this.props.etat;
 
+  getEtat(){
+    this.etat = this.props.etat;
+  }
+
   render() {
+    this.getEtat();
     return (
       <Stack>
         <IconContext.Provider value={{ color: this.etat ? "black" : "yellow", size : '12em', className: "global-class-name" }}>

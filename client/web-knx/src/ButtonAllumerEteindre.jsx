@@ -36,7 +36,7 @@ export default class ButtonAllumerEteindre extends React.Component {
 
   render() {
     return (
-      <Stack 
+      <Stack
       spacing={2} direction="column" sx={{ mb: 1 }} alignItems="center">
         <h1>{this.state.button.nameButton}</h1>
 

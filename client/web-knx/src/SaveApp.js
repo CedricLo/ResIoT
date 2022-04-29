@@ -14,10 +14,11 @@ import ButtonAllumerEteindre from './ButtonAllumerEteindre';
 import StateBar from './StateBar';
 
 //const fetch = require('node-fetch');
-const wsLien = '://localhost:3030';
+
+const lien = '://localhost:8080';
 //const httpLien = 'https'+lien+ '/home';
-const httpLien = 'http://localhost:8080/home';
-const client = new W3CWebSocket('ws' + wsLien);
+const httpLien = 'https://21df-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io/home';
+const client = new W3CWebSocket('ws'+lien);
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -25,7 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
-  color: theme.palette.text.secondary,
+  color: "white"//theme.palette.text.secondary,
 }));
 
 
@@ -47,7 +48,7 @@ export default class App extends Component {
       }
     });
     //client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
-    this.httpPost({ 'state': !this.state.chenillard.stateChenillard });
+    this.httpPost({'state' : !this.state.chenillard.stateChenillard});
     //console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
   }
 
@@ -60,7 +61,7 @@ export default class App extends Component {
       }
     });
     //client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
-    this.httpPost({ 'speed': this.state.chenillard.vitesse });
+    this.httpPost({'speed' : this.state.chenillard.vitesse});
     //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
@@ -73,19 +74,19 @@ export default class App extends Component {
       }
     });
     //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
-    this.httpPost({ 'sens': this.state.chenillard.sens });
+    this.httpPost({'sens' : this.state.chenillard.sens});
   }
 
   /**
    * Creating HTTP client
    */
   httpPost(data) {
-    fetch(httpLien, {
+    fetch("http://localhost:8080/home", {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     }).then(response => response)
-      .then(data => console.log(data));
+    .then(data => console.log(data));
     console.log("POST : ", data)
   }
 
@@ -99,20 +100,20 @@ export default class App extends Component {
       //client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
       console.log('WebSocket Client Connected');
     };
-
+    
     client.onmessage = (message) => {
       let parsedMessage = JSON.parse(message.data);
-      if (parsedMessage.state !== undefined) {
+      if(parsedMessage.state !== undefined) {
         console.log('Server responsed : State ' + parsedMessage.state);
       }
-      else if (parsedMessage.speed !== undefined) {
+      else if(parsedMessage.speed !== undefined) {
         console.log('Server responsed : Speed ' + parsedMessage.speed);
       }
-      else if (parsedMessage.sens !== undefined) {
+      else if(parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
       }
       else {
-        console.log(`Unrecognized message`)
+          console.log(`Unrecognized message`)
       }
     };
   }
@@ -122,45 +123,52 @@ export default class App extends Component {
     return (
       <Stack>
 
-        <Box sx={{
-          width: 0.8 * window.innerWidth,
-          height: 0.8 * window.innerHeight
-        }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}> <h1>Paramètre ton chenillard</h1></Grid>
-            <StateBar etat={this.state.chenillard.stateChenillard} />
-            <Grid item xs={12}>
-              <div style={{color : "#D8DFEF", fontSize: 25, fontFamily : 'revert', display : 'flex', justifyContent : 'center'}}>
-                <div></div>{" etat : " +
-                  (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +
-                  " | vitesse : " +
-                  this.state.chenillard.vitesse +
-                  " | sens : " +
-                  this.state.chenillard.sens}
-              </div>
-            </Grid>
-            <Grid item xs={6}>
+<Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={2}>
+          <Item>Controle Your Chenillard</Item>
+      <Grid item xs={20}>
+          <Item>
+            <StateBar etat={(this.state.chenillard.stateChenillard ? true : false)}/>
+              Chenillard :{" "}
+              {" etat : " +
+                (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +
+                ", \n vitesse : " +
+                this.state.chenillard.vitesse +
+                ", \n sens : " +
+                this.state.chenillard.sens}
+            </Item>
+        </Grid>
+        <Grid item xs={6}>
+          <Item>
               <ButtonAllumerEteindre
                 etat={this.state.chenillard.stateChenillard}
                 changeEtat={(etat) => {
                   this.changeEtat(etat);
                 }}
               />
-            </Grid>
-            <Grid item xs={6}>
+            </Item>
+          
+        </Grid>
+        <Grid item xs={6}>
+          <Item>
               <ButtonDirection
                 sens={this.state.chenillard.sens}
-                sensChange={(sens) => this.changeSens(sens)}></ButtonDirection>
-            </Grid>
+                sensChange={(sens) => this.changeSens(sens)}
+              /></Item>
+        </Grid>
+        
+        <Grid item xs={12}>
+          <Item>
+            
+            <SliderSpeed
+            vitesse={this.state.chenillard.vitesse}
+            vitesseChange={(vit) => this.changeVitesse(vit)}
+          />
 
-            <Grid item xs={12}>
-              <SliderSpeed
-                vitesse={this.state.chenillard.vitesse}
-                vitesseChange={(vit) => this.changeVitesse(vit)}
-              />
-            </Grid>
-          </Grid>
-        </Box>
+          </Item>
+        </Grid>
+      </Grid>
+    </Box>
       </Stack>
     );
   }
