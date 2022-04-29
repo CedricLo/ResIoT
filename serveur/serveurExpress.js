@@ -5,7 +5,7 @@ var fs = require("fs");
 const { client } = require('websocket');
 // Importing the required modules
 const WebSocketServer = require('ws');
- //127.0.0.1
+//127.0.0.1
 const cors = require('cors')
 const wsAddress = "http://localhost:3030"
 
@@ -42,14 +42,29 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors())
 
-app.post('/home', (req,res) => {
-    console.log('DATA',req.body);
+app.post('/home', (req, res) => {
+    console.log('DATA', req.body);
+    let parsedData = req.body;
+    if (parsedData.state != undefined) {
+        knxChenillard.setState(parsedData.state);
+    }
+    else if (parsedData.speed != undefined) {
+        knxChenillard.setSpeed(parsedData.speed);
+    }
+    else if (parsedData.sens != undefined) {
+        knxChenillard.setSens(parsedData.sens);
+    }
+    else {
+        console.log(`Unrecognized message`)
+    }
+
+
     res.send('Ok')
     broadcast(req.body)
 })
 
-app.post('/', (req,res) => {
-    console.log('DATA',req.body);
+app.post('/', (req, res) => {
+    console.log('DATA', req.body);
     res.send('200')
 })
 
@@ -64,18 +79,17 @@ var server = app.listen(8080, function () {
     console.log("Listening at http://%s:%s", host, port)
 })
 
- server.on('upgrade', function (_, socket){
- });
+server.on('upgrade', function (_, socket) {
+});
 
 // Creating a new websocket server
-const wss = new WebSocketServer.Server({ address : wsAddress ,port: 3030 });
+const wss = new WebSocketServer.Server({ address: wsAddress, port: 3030 });
 
 function broadcast(data) {
     wss.clients.forEach(function each(client) {
         client.send(JSON.stringify(data));
     });
 }
-
 
 wss.getUniqueID = function () {
     function s4() {
