@@ -142,7 +142,7 @@ function chenillardSpeed(speed) {
 }
 
 function broadcast(data) {
-    wss.clients.forEach(function each(client) {
+    wssLoc.clients.forEach(function each(client) {
         client.send(JSON.stringify(data));
     });
 }
