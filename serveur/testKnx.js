@@ -18,9 +18,8 @@ module.exports = {
         deconnectionKnx()
     },
 
-    chenillardStart: function (speed,wss) {
+    chenillardSpeed: function (speed) {
         chenillardSpeed(speed);
-        wssLoc = wss;
     },
 
     allumerLamp:function(lamp){
@@ -64,7 +63,8 @@ main();
 function main(){
     
 const rl = readline.createInterface({ input, output });
-   // connectionKnx()
+   connectionKnx()
+   declarationLampes()
     var intervalRoutineID;
     rl.on('line', (data)=>{
         switch(data){
@@ -103,6 +103,7 @@ const rl = readline.createInterface({ input, output });
             break ;
             case 'close' :
                 rl.close()
+                deconnectionKnx();
             break ;
             
             default :
@@ -111,14 +112,12 @@ const rl = readline.createInterface({ input, output });
         }
     })
 
-   // deconnectionKnx();
+    
 
     
 }
 
-function verifEtat(addressObjet){
 
-}
 
 
 function connectionKnx() {
@@ -158,7 +157,7 @@ function connectionKnx() {
 
     var connection = new knx.Connection({
         // ip address and port of the KNX router or interface
-        ipAddr: '127.0.0.1', ipPort: 3671,
+        ipAddr: '192.168.0.201', ipPort: 3671,
         // in case you need to specify the multicast interface (say if you have more than one)
         interface: 'eth0',
         // the KNX physical address we'd like to use
@@ -181,14 +180,15 @@ function connectionKnx() {
             connected: function () {
                 console.log('KNX is connected');
                 // WRITE an arbitrary boolean request to a DPT1 group address
-                connection.write("1/0/0", 1);
+                connection.write("0/0/1", 1);
+                connection.write("0/0/1", 0);
                 // you also WRITE to an explicit datapoint type, eg. DPT9.001 is temperature Celcius
-                connection.write("2/1/0", 22.5, "DPT9.001");
+               // connection.write("2/1/0", 22.5, "DPT9.001");
                 // you can also issue a READ request and pass a callback to capture the response
-                connection.read("1/0/1", (src, responsevalue) => {
-                    console.log("src : ", src)
-                    console.log("response value : ", responsevalue)
-                });
+               // connection.read("1/0/1", (src, responsevalue) => {
+                 //   console.log("src : ", src)
+                  //  console.log("response value : ", responsevalue)
+               // });
             },
             // get notified for all KNX events:
             event: function (evt, src, dest, value) {
@@ -262,16 +262,9 @@ function chenillardStop(intervallID){
     }
 }
 
-function broadcast(data) {
-    wssLoc.clients.forEach(function each(client) {
-        client.send(JSON.stringify(data));
-    });
-}
-
 function allumerL1() {
-    //light1.switchOn();
+    light1.switchOn();
     console.log("lampe 1 allumée ");
-    broadcast({ 'lamp': 1, 'lampState' : true })
 
 }
 function allumerL2() {
@@ -305,7 +298,7 @@ function eteindreL4() {
 }
 
 function declarationLampes() {
-    var light1 = new knx.Devices.BinarySwitch({ ga: '1/1/8', status_ga: '1/1/108' }, connection);
+    var light1 = new knx.Devices.BinarySwitch({ ga: '0/0/1', status_ga: '0/1/1' }, connection);
     console.log("The current light status is %j", light1.status.current_value);
     light1.control.on('change', function (oldvalue, newvalue) {
         console.log("**** LIGHT 1 control changed from: %j to: %j", oldvalue, newvalue);
@@ -314,7 +307,7 @@ function declarationLampes() {
         console.log("**** LIGHT 1 status changed from: %j to: %j", oldvalue, newvalue);
     });
 
-    var light2 = new knx.Devices.BinarySwitch({ ga: '1/1/8', status_ga: '1/1/108' }, connection);
+    var light2 = new knx.Devices.BinarySwitch({ ga: '0/0/2', status_ga: '0/1/2' }, connection);
     console.log("The current light status is %j", light2.status.current_value);
     light2.control.on('change', function (oldvalue, newvalue) {
         console.log("**** LIGHT 2 control changed from: %j to: %j", oldvalue, newvalue);
@@ -323,7 +316,7 @@ function declarationLampes() {
         console.log("**** LIGHT 2 status changed from: %j to: %j", oldvalue, newvalue);
     });
 
-    var light3 = new knx.Devices.BinarySwitch({ ga: '1/1/8', status_ga: '1/1/108' }, connection);
+    var light3 = new knx.Devices.BinarySwitch({ ga: '0/0/3', status_ga: '0/1/3'}, connection);
     console.log("The current light status is %j", light3.status.current_value);
     light3.control.on('change', function (oldvalue, newvalue) {
         console.log("**** LIGHT 3 control changed from: %j to: %j", oldvalue, newvalue);
@@ -332,7 +325,7 @@ function declarationLampes() {
         console.log("**** LIGHT 3 status changed from: %j to: %j", oldvalue, newvalue);
     });
 
-    var light4 = new knx.Devices.BinarySwitch({ ga: '1/1/8', status_ga: '1/1/108' }, connection);
+    var light4 = new knx.Devices.BinarySwitch({ ga: '0/0/4', status_ga: '0/1/4' }, connection);
     console.log("The current light status is %j", light4.status.current_value);
     light4.control.on('change', function (oldvalue, newvalue) {
         console.log("**** LIGHT 4 control changed from: %j to: %j", oldvalue, newvalue);
