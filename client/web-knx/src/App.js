@@ -34,7 +34,8 @@ export default class App extends Component {
     chenillard: {
       stateChenillard: false,
       sens: "gauche",
-      vitesse: 1
+      vitesse: 1,
+      lamps : [false,false,false,false]
     }
   };
 
@@ -74,6 +75,14 @@ export default class App extends Component {
     });
     //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
     this.httpPost({ 'sens': this.state.chenillard.sens });
+  }
+
+  /**
+   * switch the array of lamps on/off depending on n
+   * @param {int} n number of the lamp
+   */
+  setLampStatus(n){
+    this.state.chenillard.lamps[n-1] = !this.state.chenillard.lamps[n-1]
   }
 
   /**
@@ -121,15 +130,15 @@ export default class App extends Component {
   render() {
     return (
       <Stack>
-
         <Box sx={{
           width: 0.8 * window.innerWidth,
-          height: 0.8 * window.innerHeight
+          height: 0.85 * window.innerHeight
         }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}> <h1>Paramètre ton chenillard</h1></Grid>
-            <StateBar etat={this.state.chenillard.stateChenillard} />
-            <Grid item xs={12}>
+          <Grid style={{justifyContent : 'center'}} container spacing={2}>
+            <Grid style={{marginBottom : '30px'}} item xs={12}> <h1>Paramètre ton chenillard</h1></Grid>
+            <StateBar etat={this.state.chenillard.stateChenillard}
+            lamps={this.state.chenillard.lamps}/>
+            <Grid style={{marginTop : '15px'}} item xs={12}>
               <div style={{color : "#D8DFEF", fontSize: 25, fontFamily : 'revert', display : 'flex', justifyContent : 'center'}}>
                 <div></div>{" etat : " +
                   (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +
