@@ -65,12 +65,12 @@ module.exports = {
     }
 
 }
-
-main();
+connectionKnx()
+//main();
 function main(){
     
 const rl = readline.createInterface({ input, output });
-   connectionKnx()
+   
    //declarationLampes()
     var intervalRoutineID;
     rl.on('line', (data)=>{
@@ -133,7 +133,7 @@ const rl = readline.createInterface({ input, output });
 function connectionKnx() {
     connection = new knx.Connection({
         // ip address and port of the KNX router or interface
-        ipAddr: '192.168.0.202', ipPort: 3671,
+        ipAddr: '192.168.0.201', ipPort: 3671,
         
         // the KNX physical address we'd like to use
         physAddr: '15.15.15',
@@ -153,8 +153,9 @@ function connectionKnx() {
             // wait for connection establishment before sending anything!
             connected: function () {
                 console.log('KNX is connected');
+                declarationLampes(main);
                 // WRITE an arbitrary boolean request to a DPT1 group address
-                connection.write("0/0/1",1)
+                //connection.write("0/0/1",1)
                 // you also WRITE to an explicit datapoint type, eg. DPT9.001 is temperature Celcius
                // connection.write("2/1/0", 22.5, "DPT9.001");
                 // you can also issue a READ request and pass a callback to capture the response
@@ -208,9 +209,9 @@ function connectionKnx() {
 
 
     connection.Connect();
-    declarationLampes();
+    
 
-    allumerL3();
+   // allumerL3();
 
     deconnectionKnx();
     // Write raw buffer to a groupaddress with dpt 1 (e.g light on = value true = Buffer<01>) with a bitlength of 1
@@ -230,7 +231,7 @@ function routineSpeed(speed, routine, intervallRoutineID) {
     routine(realSpeed);
         
     intervallRoutineID =  setInterval(() => {
-        routine(speed)}, realSpeed)
+        routine(realSpeed)}, realSpeed)
     return intervallRoutineID;
     
 }
@@ -269,41 +270,56 @@ function chenillardStop(intervallID){
 }
 
 function allumerL1() {
-    //light1.switchOn()
+   // connection.write("0/0/1",1)
+    light1.switchOn()
     console.log("lampe 1 allumée ");
 
 }
 function allumerL2() {
-    //light2.switchOn();
+    //connection.write("0/0/2",1)
+
+    light2.switchOn();
     console.log("lampe 2 allumée ");
 }
 function allumerL3() {
-    //light3.switchOn();
+    //connection.write("0/0/3",1)
+
+    light3.switchOn();
     console.log("lampe 3 allumée ");
 }
 function allumerL4() {
-    //light4.switchOn();
+    //connection.write("0/0/4",1)
+
+    light4.switchOn();
     console.log("lampe 4 allumée ");
 }
 
 function eteindreL1() {
-    //light1.switchOff()
+    //connection.write("0/0/1",0)
+
+    light1.switchOff()
     console.log("lampe 1 éteinte ");
 }
 function eteindreL2() {
-    //light2.switchOff();
+   // connection.write("0/0/2",0)
+
+    light2.switchOff();
     console.log("lampe 2 éteinte ");
 }
 function eteindreL3() {
-    //light3.switchOff();
+    //connection.write("0/0/3",0)
+
+    light3.switchOff();
     console.log("lampe 3 éteinte ");
 }
 function eteindreL4() {
-    //light4.switchOff();
+    //connection.write("0/0/4",0)
+
+    light4.switchOff();
     console.log("lampe 4 éteinte ");
 }
 
-function declarationLampes() {
+function declarationLampes(callBack) {
     light1 = new knx.Devices.BinarySwitch({ ga: '0/0/1', status_ga: '0/0/101' }, connection);
     console.log("The current light status is %j", light1.status.current_value);
     light1.control.on('change', function (oldvalue, newvalue) {
@@ -340,7 +356,8 @@ function declarationLampes() {
         console.log("**** LIGHT 4 status changed from: %j to: %j", oldvalue, newvalue);
     });
 
-    light3.switchOn()
+    //light3.switchOn()
+    setTimeout(()=>{callBack()},3000)
 
 }
 
