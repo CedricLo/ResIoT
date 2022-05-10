@@ -44,7 +44,8 @@ export default class App extends Component {
       chenillard: {
         stateChenillard: etat,
         sens: this.state.chenillard.sens,
-        vitesse: this.state.chenillard.vitesse
+        vitesse: this.state.chenillard.vitesse,
+        lamps : this.state.chenillard.lamps
       }
     });
     //client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
@@ -57,7 +58,8 @@ export default class App extends Component {
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
         sens: this.state.chenillard.sens,
-        vitesse: vit
+        vitesse: vit,
+        lamps : this.state.chenillard.lamps
       }
     });
     //client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
@@ -70,7 +72,8 @@ export default class App extends Component {
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
         sens: sens,
-        vitesse: this.state.chenillard.vitesse
+        vitesse: this.state.chenillard.vitesse,
+        lamps : this.state.chenillard.lamps
       }
     });
     //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
@@ -78,11 +81,22 @@ export default class App extends Component {
   }
 
   /**
-   * switch the array of lamps on/off depending on n
+   * Set the lamp status of the lamp n depending on b
    * @param {int} n number of the lamp
+   * @param {boolean} b  status of the lamp
    */
-  setLampStatus(n){
-    this.state.chenillard.lamps[n-1] = !this.state.chenillard.lamps[n-1]
+  setLampStatus(n,b){
+    var newLamps = this.state.chenillard.lamps;
+    newLamps[n-1] = b;
+    this.setState({
+      chenillard: {
+        stateChenillard: this.state.chenillard.stateChenillard,
+        sens: this.state.chenillard.sens,
+        vitesse: this.state.chenillard.vitesse,
+        lamps : newLamps
+      }
+    })
+    //this.httpPost({'lamp' : n, 'lampState' : b});
   }
 
   /**
@@ -94,8 +108,8 @@ export default class App extends Component {
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     }).then(response => response)
-      .then(data => console.log(data));
-    console.log("POST : ", data)
+    // .then(data => console.log(data));
+    //console.log("POST : ", data)
   }
 
 
@@ -120,6 +134,9 @@ export default class App extends Component {
       else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
       }
+      else if(parsedMessage.lamp !== undefined) {
+        this.setLampStatus(parsedMessage.lamp,parsedMessage.lampState)
+      }
       else {
         console.log(`Unrecognized message`)
       }
@@ -137,7 +154,8 @@ export default class App extends Component {
           <Grid style={{justifyContent : 'center'}} container spacing={2}>
             <Grid style={{marginBottom : '30px'}} item xs={12}> <h1>Paramètre ton chenillard</h1></Grid>
             <StateBar etat={this.state.chenillard.stateChenillard}
-            lamps={this.state.chenillard.lamps}/>
+            lamps={this.state.chenillard.lamps}
+            setLampStatus={(n,b)=>this.setLampStatus(n,b)}/>
             <Grid style={{marginTop : '15px'}} item xs={12}>
               <div style={{color : "#D8DFEF", fontSize: 25, fontFamily : 'revert', display : 'flex', justifyContent : 'center'}}>
                 <div></div>{" etat : " +
