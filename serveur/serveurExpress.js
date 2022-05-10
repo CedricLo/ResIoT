@@ -19,7 +19,6 @@ class Chenillard {
         this.state = state;
         this.speed = speed;
         this.sens = sens;
-        this.lamps = false;
     }
 
     setState(newState) {
@@ -36,13 +35,13 @@ class Chenillard {
         this.sens = newSens;
     }
 
-    setLamp(n,b){
-        console.log('LAMPS',this.lamps);
-        this.lamps=b;
-    }
+    /*setLamp(n,b){
+        console.log('LAMPS2',this.lamps);
+        this.lamps[n-1]=b;
+    }*/
 }
 
-var knxChenillard = new Chenillard(false, 1, 'gauche', false);
+var knxChenillard = new Chenillard(false, 1, 'gauche');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -61,7 +60,7 @@ app.post('/home', (req,res) => {
         knxChenillard.setSens(parsedData.sens);
     }
     else if (parsedData.lamp != undefined) {
-        knxChenillard.setLamp(parsedData.lamp,parsedData.lampState)
+        broadcast(req.body)
     }
     else {
         console.log(`Unrecognized message`)
@@ -120,9 +119,9 @@ wss.on("connection", ws => {
 
     ws.on("message", data => {
         console.log(`Client ${ws.id} has sent us: ${data}`)
-        wss.clients.forEach(function each(client) {
+        /*wss.clients.forEach(function each(client) {
             client.send(JSON.stringify(JSON.parse(data)));
-        });
+        });*/
 
         parsedData = JSON.parse(data);
         if (parsedData.state != undefined) {

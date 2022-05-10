@@ -108,8 +108,8 @@ export default class App extends Component {
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     }).then(response => response)
-      .then(data => console.log(data));
-    console.log("POST : ", data)
+    // .then(data => console.log(data));
+    //console.log("POST : ", data)
   }
 
 

@@ -4,6 +4,7 @@ const readline = require('readline');
 const { stdin: input, stdout: output, exit, stderr, mainModule } = require('process');
 
 var wssLoc;
+var intervalRoutineID;
 
 module.exports = {
     serveurKnxInit: function (wss) {
@@ -19,7 +20,11 @@ module.exports = {
     },
 
     chenillardStart: function (speed,wss) {
-        chenillardSpeed(speed);
+        intervalRoutineID = routineSpeed(speed, chenillardSens1, intervalRoutineID)
+        wssLoc = wss;
+    },
+    chenillardStop: function (wss) {
+        routineStop(intervalRoutineID)
         wssLoc = wss;
     },
 
@@ -99,7 +104,7 @@ const rl = readline.createInterface({ input, output });
                 intervalRoutineID = routineSpeed(50, chenillardSens2, intervalRoutineID)
             break ;
             case 'stop' :
-                chenillardStop(intervalRoutineID);
+                routineStop(intervalRoutineID);
             break ;
             case 'close' :
                 rl.close()
@@ -218,9 +223,9 @@ function connectionKnx() {
  * @param {*} speed 
  */
 function routineSpeed(speed, routine, intervallRoutineID) {
-    chenillardStop(intervallRoutineID)
+    routineStop(intervallRoutineID)
     
-    let realSpeed = 500000 / speed;
+    let realSpeed = 50000 / speed;
     routine(realSpeed);
         
     intervallRoutineID =  setInterval(() => {
@@ -228,6 +233,7 @@ function routineSpeed(speed, routine, intervallRoutineID) {
     return intervallRoutineID;
     
 }
+
 
 function chenillardSens1(realSpeed){
         let id = setTimeout(() => { allumerL1() }, 0);
@@ -240,6 +246,7 @@ function chenillardSens1(realSpeed){
             setTimeout(() => { eteindreL4() }, realSpeed)
         return id
 }
+
 function chenillardSens2(realSpeed){
         let id = setTimeout(() => { allumerL4() }, 0);
             setTimeout(() => { eteindreL4() }, realSpeed / 4)
@@ -252,11 +259,10 @@ function chenillardSens2(realSpeed){
         return id;
 }
 
-function chenillardStop(intervallID){
+function routineStop(intervallID){
     //console.log(intervallID)
     if(intervallID!== undefined && intervallID!== null ){
        clearInterval(intervallID)
-       
        intervallID=null;
 
     }
@@ -277,31 +283,38 @@ function allumerL1() {
 function allumerL2() {
     //light2.switchOn();
     console.log("lampe 2 allumée ");
+    broadcast({ 'lamp': 2, 'lampState' : true })
 }
 function allumerL3() {
     //light3.switchOn();
     console.log("lampe 3 allumée ");
+    broadcast({ 'lamp': 3, 'lampState' : true })
 }
 function allumerL4() {
     //light4.switchOn();
     console.log("lampe 4 allumée ");
+    broadcast({ 'lamp': 4, 'lampState' : true })
 }
 
 function eteindreL1() {
     //light1.switchOff();
     console.log("lampe 1 éteinte ");
+    broadcast({ 'lamp': 1, 'lampState' : false })
 }
 function eteindreL2() {
     //light2.switchOff();
     console.log("lampe 2 éteinte ");
+    broadcast({ 'lamp': 2, 'lampState' : false })
 }
 function eteindreL3() {
     //light3.switchOff();
     console.log("lampe 3 éteinte ");
+    broadcast({ 'lamp': 3, 'lampState' : false })
 }
 function eteindreL4() {
     //light4.switchOff();
     console.log("lampe 4 éteinte ");
+    broadcast({ 'lamp': 4, 'lampState' : false })
 }
 
 function declarationLampes() {
