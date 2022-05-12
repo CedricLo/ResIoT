@@ -7,10 +7,6 @@ const { jsonp } = require('express/lib/response');
 
 var wssLoc;
 var connection;
-var light1
-var light2
-var light3
-var light4
 
 module.exports = {
     serveurKnxInit: function (wss) {
@@ -32,16 +28,16 @@ module.exports = {
     allumerLamp:function(lamp){
         switch(lamp){
             case '1' :
-                allumerL1();
+                allumerL(light1);
             break ;
             case '2' :
-                allumerL2();
+                allumerL(light2);
             break ;
             case '3' :
-                allumerL3();
+                allumerL(light3);
             break ;
             case '4' :
-                allumerL4();
+                allumerL(light4);
             break ;
         }
     },
@@ -49,16 +45,16 @@ module.exports = {
     eteindreLamp:function(lamp){
         switch(lamp){
             case '1' :
-                eteindreL1();
+                eteindreL(light1);
             break ;
             case '2' :
-                eteindreL2();
+                eteindreL(light2);
             break ;
             case '3' :
-                eteindreL3();
+                eteindreL(light3);
             break ;
             case '4' :
-                eteindreL4();
+                eteindreL(light4);
             break ;
             
         }
@@ -79,28 +75,28 @@ const rl = readline.createInterface({ input, output });
                 declarationLampes();
             break ;
             case 'l1o' :
-                eteindreL1();
+                eteindreL(light1);
             break ;
             case 'l2o' :
-                eteindreL2();
+                eteindreL(light2);
             break ;
             case 'l3o' :
-                eteindreL3();
+                eteindreL(light3);
             break ;
             case 'l4o' :
-                eteindreL4();
+                eteindreL(light4);
             break ;
             case 'l1a' :
-                allumerL1();
+                allumerL(light1);
             break ;
             case 'l2a' :
-                allumerL2();
+                allumerL(light2);
             break ;
             case 'l3a' :
-                allumerL3();
+                allumerL(light3);
             break ;
             case 'l4a' :
-                allumerL4();
+                allumerL(light4);
             break ;
             case 'chen' :
                 intervalRoutineID = routineSpeed(50, chenillardSens1, intervalRoutineID)
@@ -153,7 +149,7 @@ function connectionKnx() {
             // wait for connection establishment before sending anything!
             connected: function () {
                 console.log('KNX is connected');
-                declarationLampes(main);
+                
                 // WRITE an arbitrary boolean request to a DPT1 group address
                 //connection.write("0/0/1",1)
                 // you also WRITE to an explicit datapoint type, eg. DPT9.001 is temperature Celcius
@@ -212,7 +208,7 @@ function connectionKnx() {
     
 
    // allumerL3();
-
+   declarationLampes(main);
     deconnectionKnx();
     // Write raw buffer to a groupaddress with dpt 1 (e.g light on = value true = Buffer<01>) with a bitlength of 1
    // connection.writeRaw('1/0/0', Buffer.from('01', 'hex'), 1)
@@ -227,35 +223,35 @@ function connectionKnx() {
 function routineSpeed(speed, routine, intervallRoutineID) {
     chenillardStop(intervallRoutineID)
     
-    let realSpeed = 500000 / speed;
+    let realSpeed = 50000 / speed;
     routine(realSpeed);
         
     intervallRoutineID =  setInterval(() => {
-        routine(realSpeed)}, realSpeed)
+        routine(realSpeed)}, realSpeed);
     return intervallRoutineID;
     
 }
 
 function chenillardSens1(realSpeed){
-        let id = setTimeout(() => { allumerL1() }, 0);
-            setTimeout(() => { eteindreL1() }, realSpeed / 4)
-            setTimeout(() => { allumerL2() }, realSpeed / 4);
-            setTimeout(() => { eteindreL2() }, 2 * realSpeed / 4)
-            setTimeout(() => { allumerL3() }, 2 * realSpeed / 4);
-            setTimeout(() => { eteindreL3() }, 3 * realSpeed / 4)
-            setTimeout(() => { allumerL4() }, 3 * realSpeed / 4);
-            setTimeout(() => { eteindreL4() }, realSpeed)
-        return id
+    let id = setTimeout(() => { allumerL(light1) }, 0);
+        setTimeout(() => { eteindreL(light1) }, realSpeed / 4)
+        setTimeout(() => { allumerL(light2) }, realSpeed / 4);
+        setTimeout(() => { eteindreL(light2) }, 2 * realSpeed / 4)
+        setTimeout(() => { allumerL(light3) }, 2 * realSpeed / 4);
+        setTimeout(() => { eteindreL(light3) }, 3 * realSpeed / 4)
+        setTimeout(() => { allumerL(light4) }, 3 * realSpeed / 4);
+        setTimeout(() => { eteindreL(light4) }, realSpeed)
+    return id
 }
 function chenillardSens2(realSpeed){
-        let id = setTimeout(() => { allumerL4() }, 0);
-            setTimeout(() => { eteindreL4() }, realSpeed / 4)
-            setTimeout(() => { allumerL3() }, realSpeed / 4);
-            setTimeout(() => { eteindreL3() }, 2 * realSpeed / 4)
-            setTimeout(() => { allumerL2() }, 2 * realSpeed / 4);
-            setTimeout(() => { eteindreL2() }, 3 * realSpeed / 4)
-            setTimeout(() => { allumerL1() }, 3 * realSpeed / 4);
-            setTimeout(() => { eteindreL1() }, realSpeed)
+        let id = setTimeout(()=>{ allumerL(light4) }, 0);
+        setTimeout(() => { eteindreL(light4) }, realSpeed / 4)
+        setTimeout(() => { allumerL(light3) }, realSpeed / 4);
+        setTimeout(() => { eteindreL(light3) }, 2 * realSpeed / 4)
+        setTimeout(() => { allumerL(light2) }, 2 * realSpeed / 4);
+        setTimeout(() => { eteindreL(light2) }, 3 * realSpeed / 4)
+        setTimeout(() => { allumerL(light1) }, 3 * realSpeed / 4);
+        setTimeout(() => { eteindreL(light1) }, realSpeed)
         return id;
 }
 
@@ -269,58 +265,15 @@ function chenillardStop(intervallID){
     }
 }
 
-function allumerL1() {
-   // connection.write("0/0/1",1)
-    light1.switchOn()
-    console.log("lampe 1 allumée ");
-
+function allumerL(lamp){
+    lamp.switchOn()
 }
-function allumerL2() {
-    //connection.write("0/0/2",1)
-
-    light2.switchOn();
-    console.log("lampe 2 allumée ");
-}
-function allumerL3() {
-    //connection.write("0/0/3",1)
-
-    light3.switchOn();
-    console.log("lampe 3 allumée ");
-}
-function allumerL4() {
-    //connection.write("0/0/4",1)
-
-    light4.switchOn();
-    console.log("lampe 4 allumée ");
-}
-
-function eteindreL1() {
-    //connection.write("0/0/1",0)
-
-    light1.switchOff()
-    console.log("lampe 1 éteinte ");
-}
-function eteindreL2() {
-   // connection.write("0/0/2",0)
-
-    light2.switchOff();
-    console.log("lampe 2 éteinte ");
-}
-function eteindreL3() {
-    //connection.write("0/0/3",0)
-
-    light3.switchOff();
-    console.log("lampe 3 éteinte ");
-}
-function eteindreL4() {
-    //connection.write("0/0/4",0)
-
-    light4.switchOff();
-    console.log("lampe 4 éteinte ");
+function eteindreL(lamp){
+    lamp.switchOff()
 }
 
 function declarationLampes(callBack) {
-    light1 = new knx.Devices.BinarySwitch({ ga: '0/0/1', status_ga: '0/0/101' }, connection);
+    var light1 = new knx.Devices.BinarySwitch({ ga: '0/0/1', status_ga: '0/0/101' }, connection);
     console.log("The current light status is %j", light1.status.current_value);
     light1.control.on('change', function (oldvalue, newvalue) {
         console.log("**** LIGHT 1 control changed from: %j to: %j", oldvalue, newvalue);
@@ -329,7 +282,7 @@ function declarationLampes(callBack) {
         console.log("**** LIGHT 1 status changed from: %j to: %j", oldvalue, newvalue);
     });
 
-    light2 = new knx.Devices.BinarySwitch({ ga: '0/0/2', status_ga: '0/1/2' }, connection);
+    var light2 = new knx.Devices.BinarySwitch({ ga: '0/0/2', status_ga: '0/1/2' }, connection);
     console.log("The current light status is %j", light2.status.current_value);
     light2.control.on('change', function (oldvalue, newvalue) {
         console.log("**** LIGHT 2 control changed from: %j to: %j", oldvalue, newvalue);
@@ -338,7 +291,7 @@ function declarationLampes(callBack) {
         console.log("**** LIGHT 2 status changed from: %j to: %j", oldvalue, newvalue);
     });
 
-    light3 = new knx.Devices.BinarySwitch({ ga: '0/0/3', status_ga: '0/1/3'}, connection);
+    var light3 = new knx.Devices.BinarySwitch({ ga: '0/0/3', status_ga: '0/1/3'}, connection);
     console.log("The current light status is %j", light3.status.current_value);
     light3.control.on('change', function (oldvalue, newvalue) {
         console.log("**** LIGHT 3 control changed from: %j to: %j", oldvalue, newvalue);
@@ -347,7 +300,7 @@ function declarationLampes(callBack) {
         console.log("**** LIGHT 3 status changed from: %j to: %j", oldvalue, newvalue);
     });
 
-    light4 = new knx.Devices.BinarySwitch({ ga: '0/0/4', status_ga: '0/1/4' }, connection);
+    var light4 = new knx.Devices.BinarySwitch({ ga: '0/0/4', status_ga: '0/1/4' }, connection);
     console.log("The current light status is %j", light4.status.current_value);
     light4.control.on('change', function (oldvalue, newvalue) {
         console.log("**** LIGHT 4 control changed from: %j to: %j", oldvalue, newvalue);
@@ -357,7 +310,7 @@ function declarationLampes(callBack) {
     });
 
     //light3.switchOn()
-    setTimeout(()=>{callBack()},3000)
+    setTimeout(()=>{main()},3000)
 
 }
 
