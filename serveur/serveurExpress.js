@@ -102,6 +102,8 @@ var server = app.listen(8080, function () {
 // Creating a new websocket server
 const wss = new WebSocketServer.Server({ address : wsAddress ,port: 3030 });
 
+knxServer.serveurKnxInit(wss);
+
 function broadcast(data) {
     wss.clients.forEach(function each(client) {
         client.send(JSON.stringify(data));
@@ -119,6 +121,7 @@ wss.getUniqueID = function () {
 
 // Creating connection using websocket
 wss.on("connection", ws => {
+    
     console.log("new client connected");
     ws.id = wss.getUniqueID();
     /*
