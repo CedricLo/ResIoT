@@ -33,7 +33,7 @@ export default class App extends Component {
   state = {
     chenillard: {
       stateChenillard: false,
-      sens: "gauche",
+      sens: "droite",
       vitesse: 1,
       lamps : [false,false,false,false]
     }

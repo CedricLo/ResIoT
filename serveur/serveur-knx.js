@@ -2,9 +2,14 @@ const knx = require('knx');
 const exitHook = require('async-exit-hook');
 const readline = require('readline');
 const { stdin: input, stdout: output, exit, stderr, mainModule } = require('process');
+const { resolve } = require('path');
+const { rejects } = require('assert');
 
 var wssLoc;
 var intervalRoutineID;
+var chenillardState = false;
+var speed;
+var sens;
 
 module.exports = {
     serveurKnxInit: function (wss) {
@@ -19,13 +24,27 @@ module.exports = {
         deconnectionKnx()
     },
 
-    chenillardStart: function (speed,wss) {
-        intervalRoutineID = routineSpeed(speed, chenillardSens1, intervalRoutineID)
+    chenillardStart: function (newSpeed,wss) {
+        if(newSpeed == undefined || newSpeed == 0) newSpeed = 1
+        if(sens == undefined) sens = true;
+        chenillardState = true;
+        speed = (101-newSpeed)*10+100;
+        chenillardSens1(1);       //routineSpeed(speed, chenillardSens1)
         wssLoc = wss;
     },
+
+    chenillardSpeed: function(newSpeed,wss){
+        if(newSpeed == 0) newSpeed = 1;
+        speed = (101-newSpeed)*10+100;
+    },
+
     chenillardStop: function (wss) {
-        routineStop(intervalRoutineID)
+        chenillardState = false;
         wssLoc = wss;
+    },
+
+    chenillardSetSens() {
+        sens = !sens;
     },
 
     allumerLamp:function(lamp){
@@ -70,7 +89,6 @@ function main(){
     
 const rl = readline.createInterface({ input, output });
    // connectionKnx()
-    var intervalRoutineID;
     rl.on('line', (data)=>{
         switch(data){
             case 'l1o' :
@@ -98,10 +116,10 @@ const rl = readline.createInterface({ input, output });
                 allumerL4();
             break ;
             case 'chen' :
-                intervalRoutineID = routineSpeed(50, chenillardSens1, intervalRoutineID)
+                intervalRoutineID = routineSpeed(50, chenillardSens1)
             break ;
             case 'sens' :
-                intervalRoutineID = routineSpeed(50, chenillardSens2, intervalRoutineID)
+                intervalRoutineID = routineSpeed(50, chenillardSens2)
             break ;
             case 'stop' :
                 routineStop(intervalRoutineID);
@@ -218,53 +236,69 @@ function connectionKnx() {
 
 }
 
-/**
- * Regule
- * @param {*} speed 
- */
-function routineSpeed(speed, routine, intervallRoutineID) {
-    routineStop(intervallRoutineID)
-    
-    let realSpeed = 50000 / speed;
-    routine(realSpeed);
-        
-    intervallRoutineID =  setInterval(() => {
-        routine(speed)}, realSpeed)
-    return intervallRoutineID;
-    
-}
 
 
-function chenillardSens1(realSpeed){
-        let id = setTimeout(() => { allumerL1() }, 0);
-            setTimeout(() => { eteindreL1() }, realSpeed / 4)
-            setTimeout(() => { allumerL2() }, realSpeed / 4);
-            setTimeout(() => { eteindreL2() }, 2 * realSpeed / 4)
-            setTimeout(() => { allumerL3() }, 2 * realSpeed / 4);
-            setTimeout(() => { eteindreL3() }, 3 * realSpeed / 4)
-            setTimeout(() => { allumerL4() }, 3 * realSpeed / 4);
-            setTimeout(() => { eteindreL4() }, realSpeed)
-        return id
-}
-
-function chenillardSens2(realSpeed){
-        let id = setTimeout(() => { allumerL4() }, 0);
-            setTimeout(() => { eteindreL4() }, realSpeed / 4)
-            setTimeout(() => { allumerL3() }, realSpeed / 4);
-            setTimeout(() => { eteindreL3() }, 2 * realSpeed / 4)
-            setTimeout(() => { allumerL2() }, 2 * realSpeed / 4);
-            setTimeout(() => { eteindreL2() }, 3 * realSpeed / 4)
-            setTimeout(() => { allumerL1() }, 3 * realSpeed / 4);
-            setTimeout(() => { eteindreL1() }, realSpeed)
-        return id;
-}
-
-function routineStop(intervallID){
-    //console.log(intervallID)
-    if(intervallID!== undefined && intervallID!== null ){
-       clearInterval(intervallID)
-       intervallID=null;
-
+function chenillardSens1(n){
+    if(chenillardState){
+        console.log(speed)
+        if(sens){
+            setTimeout(() => {
+                switch(n){
+                    case 1:
+                        eteindreL4();
+                        allumerL1();
+                    break;
+                    case 2:
+                        eteindreL1();
+                        allumerL2();
+                    break;
+                    case 3:
+                        eteindreL2();
+                        allumerL3();
+                    break;
+                    case 4:
+                        eteindreL3();
+                        allumerL4();
+                    break;
+                }
+                if(n>=4) {
+                    chenillardSens1(1)
+                }
+                else chenillardSens1(n+1);
+            }, speed)
+        }
+        else {
+            setTimeout(() => {
+                switch(n){
+                    case 1:
+                        eteindreL1();
+                        allumerL4();
+                    break;
+                    case 2:
+                        eteindreL4();
+                        allumerL3();
+                    break;
+                    case 3:
+                        eteindreL3();
+                        allumerL2();
+                    break;
+                    case 4:
+                        eteindreL2();
+                        allumerL1();
+                    break;
+                }
+                if(n>=4) {
+                    chenillardSens1(1)
+                }
+                else chenillardSens1(n+1);
+            }, speed)
+        }
+    }
+    else {
+        eteindreL1();
+        eteindreL2();
+        eteindreL3();
+        eteindreL4();
     }
 }
 

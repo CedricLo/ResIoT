@@ -230,7 +230,7 @@ function routineSpeed(speed, routine, intervallRoutineID) {
     routine(realSpeed);
         
     intervallRoutineID =  setInterval(() => {
-        routine(speed)}, realSpeed)
+        routine(realSpeed)}, realSpeed)
     return intervallRoutineID;
     
 }

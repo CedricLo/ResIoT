@@ -24,15 +24,20 @@ class Chenillard {
     setState(newState) {
         this.state = newState;
         console.log('chenillard state : ' + this.state)
+        if(newState){
+            knxServer.chenillardStart(this.speed,wss);
+        }
+        else knxServer.chenillardStop(wss);
     }
 
     setSpeed(newSpeed) {
         this.speed = newSpeed;
-        knxServer.chenillardStart(this.speed,wss);
+        knxServer.chenillardSpeed(this.speed,wss);
     }
 
     setSens(newSens) {
         this.sens = newSens;
+        knxServer.chenillardSetSens();
     }
 
     /*setLamp(n,b){
