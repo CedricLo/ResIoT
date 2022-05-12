@@ -6,30 +6,32 @@ import ButtonAllumerEteindre from './components/ButtonAllumerEteindre';
 import ButtonDirection from './components/ButtonDirection';
 import SliderSpeed from './components/SliderSpeed';
 
-const lien = '://21df-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io';
+//const fetch = require('node-fetch');
+const wsLien = '://localhost:3030';
 //const httpLien = 'https'+lien+ '/home';
-const httpLien = 'https://21df-2a02-8440-7210-39b8-83d-1264-bd9-2524.ngrok.io/home';
-const client = new W3CWebSocket('ws'+lien);
+const httpLien = 'http://localhost:8080/home';
+const client = new W3CWebSocket('ws' + wsLien);
 
 export default class App extends Component {
   state = {
     chenillard: {
       stateChenillard: false,
-      sens: "gauche",
-      vitesse: 1
+      sens: "droite",
+      vitesse: 1,
+      lamps : [false,false,false,false]
     }
   };
-
   changeEtat(etat) {
     this.setState({
       chenillard: {
         stateChenillard: etat,
         sens: this.state.chenillard.sens,
-        vitesse: this.state.chenillard.vitesse
+        vitesse: this.state.chenillard.vitesse,
+        lamps : this.state.chenillard.lamps
       }
     });
-    client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
-    this.httpPost({'state' : !this.state.chenillard.stateChenillard});
+    //client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
+    this.httpPost({ 'state': !this.state.chenillard.stateChenillard });
     //console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
   }
 
@@ -38,11 +40,12 @@ export default class App extends Component {
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
         sens: this.state.chenillard.sens,
-        vitesse: vit
+        vitesse: vit,
+        lamps : this.state.chenillard.lamps
       }
     });
     //client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
-    this.httpPost({'speed' : this.state.chenillard.vitesse});
+    this.httpPost({ 'speed': this.state.chenillard.vitesse });
     //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
@@ -51,46 +54,68 @@ export default class App extends Component {
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
         sens: sens,
-        vitesse: this.state.chenillard.vitesse
+        vitesse: this.state.chenillard.vitesse,
+        lamps : this.state.chenillard.lamps
       }
     });
-  //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
-  this.httpPost({'sens' : this.state.chenillard.sens});
-}
+    //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
+    this.httpPost({ 'sens': this.state.chenillard.sens });
+  }
 
+  /**
+   * Set the lamp status of the lamp n depending on b
+   * @param {int} n number of the lamp
+   * @param {boolean} b  status of the lamp
+   */
+  setLampStatus(n,b){
+    var newLamps = this.state.chenillard.lamps;
+    newLamps[n-1] = b;
+    this.setState({
+      chenillard: {
+        stateChenillard: this.state.chenillard.stateChenillard,
+        sens: this.state.chenillard.sens,
+        vitesse: this.state.chenillard.vitesse,
+        lamps : newLamps
+      }
+    })
+  }
   
   /**
-  * Creating HTTP client
-  */
-  httpPost(data) {
-    fetch("http://localhost:8080/home", {
+   * Creating HTTP client
+   */
+   httpPost(data) {
+    fetch(httpLien, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     }).then(response => response)
-    .then(data => console.log(data));
-    console.log("POST : ", data)
+    // .then(data => console.log(data));
+    //console.log("POST : ", data)
   }
 
   constructor() {
     super()
     client.onopen = () => {
-      client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
+      //client.send(JSON.stringify({'state' : this.state.chenillard.stateChenillard}));
       console.log('WebSocket Client Connected');
     };
+
     client.onmessage = (message) => {
       let parsedMessage = JSON.parse(message.data);
-      if(parsedMessage.state != undefined) {
+      if (parsedMessage.state !== undefined) {
         console.log('Server responsed : State ' + parsedMessage.state);
       }
-      else if(parsedMessage.speed != undefined) {
+      else if (parsedMessage.speed !== undefined) {
         console.log('Server responsed : Speed ' + parsedMessage.speed);
       }
-      else if(parsedMessage.sens != undefined) {
+      else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
       }
+      else if(parsedMessage.lamp !== undefined) {
+        this.setLampStatus(parsedMessage.lamp,parsedMessage.lampState)
+      }
       else {
-          console.log(`Unrecognized message`)
+        console.log(`Unrecognized message`)
       }
     };
   }
