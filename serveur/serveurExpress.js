@@ -40,10 +40,14 @@ class Chenillard {
         knxServer.chenillardSetSens();
     }
 
-    /*setLamp(n,b){
-        console.log('LAMPS2',this.lamps);
-        this.lamps[n-1]=b;
-    }*/
+    setLamp(n,b){
+        if(b){
+            knxServer.allumerLamp(n)
+        }
+        else {
+            knxServer.eteindreLamp(n)
+        }
+    }
 }
 
 var knxChenillard = new Chenillard(false, 1, 'gauche');
@@ -66,6 +70,7 @@ app.post('/home', (req,res) => {
     }
     else if (parsedData.lamp != undefined) {
         broadcast(req.body)
+        knxChenillard.setLamp(parsedData.lamp,parsedData.lampState)
     }
     else {
         console.log(`Unrecognized message`)

@@ -96,7 +96,6 @@ export default class App extends Component {
         lamps : newLamps
       }
     })
-    //this.httpPost({'lamp' : n, 'lampState' : b});
   }
 
   /**
@@ -155,7 +154,8 @@ export default class App extends Component {
             <Grid style={{marginBottom : '30px'}} item xs={12}> <h1>Paramètre ton chenillard</h1></Grid>
             <StateBar etat={this.state.chenillard.stateChenillard}
             lamps={this.state.chenillard.lamps}
-            setLampStatus={(n,b)=>this.setLampStatus(n,b)}/>
+            setLampStatus={(n,b)=>this.setLampStatus(n,b)}
+            httpPost={(data)=> this.httpPost(data)}/>
             <Grid style={{marginTop : '15px'}} item xs={12}>
               <div style={{color : "#D8DFEF", fontSize: 25, fontFamily : 'revert', display : 'flex', justifyContent : 'center'}}>
                 <div></div>{" etat : " +
