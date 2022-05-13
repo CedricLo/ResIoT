@@ -9,9 +9,10 @@ import StateBar from './components/StateBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 //const fetch = require('node-fetch');
-const wsLien = '://localhost:3030';
+const wsLien = '://192.168.0.111:3030';
+
 //const httpLien = 'https'+lien+ '/home';
-const httpLien = 'http://localhost:8080/home';
+const httpLien = 'http://192.168.0.111:8080/home';
 const client = new W3CWebSocket('ws' + wsLien);
 
 export default class App extends Component {
@@ -20,7 +21,7 @@ export default class App extends Component {
       stateChenillard: false,
       sens: "droite",
       vitesse: 1,
-      lamps : [false,false,false,false]
+      lamps: [false, false, false, false]
     }
   };
   changeEtat(etat) {
@@ -29,7 +30,7 @@ export default class App extends Component {
         stateChenillard: etat,
         sens: this.state.chenillard.sens,
         vitesse: this.state.chenillard.vitesse,
-        lamps : this.state.chenillard.lamps
+        lamps: this.state.chenillard.lamps
       }
     });
     //client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
@@ -43,7 +44,7 @@ export default class App extends Component {
         stateChenillard: this.state.chenillard.stateChenillard,
         sens: this.state.chenillard.sens,
         vitesse: vit,
-        lamps : this.state.chenillard.lamps
+        lamps: this.state.chenillard.lamps
       }
     });
     //client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
@@ -57,7 +58,7 @@ export default class App extends Component {
         stateChenillard: this.state.chenillard.stateChenillard,
         sens: sens,
         vitesse: this.state.chenillard.vitesse,
-        lamps : this.state.chenillard.lamps
+        lamps: this.state.chenillard.lamps
       }
     });
     //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
@@ -69,23 +70,23 @@ export default class App extends Component {
    * @param {int} n number of the lamp
    * @param {boolean} b  status of the lamp
    */
-  setLampStatus(n,b){
+  setLampStatus(n, b) {
     var newLamps = this.state.chenillard.lamps;
-    newLamps[n-1] = b;
+    newLamps[n - 1] = b;
     this.setState({
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
         sens: this.state.chenillard.sens,
         vitesse: this.state.chenillard.vitesse,
-        lamps : newLamps
+        lamps: newLamps
       }
     })
   }
-  
+
   /**
    * Creating HTTP client
    */
-   httpPost(data) {
+  httpPost(data) {
     fetch(httpLien, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -113,8 +114,8 @@ export default class App extends Component {
       else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
       }
-      else if(parsedMessage.lamp !== undefined) {
-        this.setLampStatus(parsedMessage.lamp,parsedMessage.lampState)
+      else if (parsedMessage.lamp !== undefined) {
+        this.setLampStatus(parsedMessage.lamp, parsedMessage.lampState)
       }
       else {
         console.log(`Unrecognized message`)
@@ -123,69 +124,68 @@ export default class App extends Component {
   }
   render() {
     return (
-     
+
       <View style={[styles.container, {
         // Try setting `flexDirection` to `"row"`.
         flexDirection: "column"
       }]}>
         <View style={styles.item}>
           <Text style={styles.titleApp}>
-          Paramètre ton chenillard</Text>
+            Paramètre ton chenillard</Text>
         </View>
         <View>
-        <View style= {styles.item}>
+          <View style={styles.item}>
             <StateBar etat={this.state.chenillard.stateChenillard}
-            lamps={this.state.chenillard.lamps}
-            setLampStatus={(n,b)=>this.setLampStatus(n,b)}
-            httpPost={(data)=> this.httpPost(data)}
+              lamps={this.state.chenillard.lamps}
+              setLampStatus={(n, b) => this.setLampStatus(n, b)}
+              httpPost={(data) => this.httpPost(data)}
             ></StateBar>
-            
+
           </View>
         </View>
-        <View style = {styles.item}>
+        <View style={styles.item}>
           <Text style={styles.title}>
             Chenillard :{" "}
-              {" etat : " +
-                (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +
-                ", \n vitesse : " +
-                this.state.chenillard.vitesse +
-                ", \n sens : " +
-                this.state.chenillard.sens}</Text>
+            {" etat : " +
+              (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +
+              ", \n vitesse : " +
+              this.state.chenillard.vitesse +
+              ", \n sens : " +
+              this.state.chenillard.sens}</Text>
         </View>
 
 
-      <View style={[styles.container, {
-        // Try setting `flexDirection` to `"row"`.
-        flexDirection: "row"
-      }]}>
-        <View style={styles.item}>
+        <View style={[styles.container, {
+          flexDirection: "row"
+        }]}>
+          <View style={styles.item}>
             <ButtonAllumerEteindre
-                  etat={this.state.chenillard.stateChenillard}
-                  changeEtat={(etat) => {
-                    this.changeEtat(etat);
-                  }}
-                />
-          
-          </View> 
-        <View style={styles.item}>
-            <ButtonDirection
-                  sens={this.state.chenillard.sens}
-                  sensChange={(sens) => this.changeSens(sens)}
-                />
-          </View>
-          </View>
-        <View style={styles.item}>
-          <SliderSpeed
-              vitesse={this.state.chenillard.vitesse}
-              vitesseChange={(vit) => this.changeVitesse(vit)}
-              
+              etat={this.state.chenillard.stateChenillard}
+              changeEtat={(etat) => {
+                this.changeEtat(etat);
+              }}
             />
 
-          </View> 
-    </View>
+          </View>
+          <View style={styles.item}>
+            <ButtonDirection
+              sens={this.state.chenillard.sens}
+              sensChange={(sens) => this.changeSens(sens)}
+            />
+          </View>
+        </View>
+        <View style={styles.item}>
+          <SliderSpeed
+            vitesse={this.state.chenillard.vitesse}
+            vitesseChange={(vit) => this.changeVitesse(vit)}
 
-      
-    
+          />
+
+        </View>
+      </View>
+
+
+
     );
   }
 }
@@ -197,24 +197,27 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 20,
     marginVertical: 8,
-    backgroundColor : "#053e85"
+    backgroundColor: "#053e85"
   },
   item: {
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 8,
-    backgroundColor : "#0971f1",
+    backgroundColor: "#0971f1",
     alignItems: "center",
   },
   title: {
-    fontSize: 32,
-    alignItems: "center"
+    fontSize: 25,
+    alignItems: "center",
+    color:"white",
+    textAlign: "center",
   },
   titleApp: {
     fontSize: 32,
+    color:"white",
     alignItems: "center",
-    textAlign : "center",
-    
+    textAlign: "center",
+
   },
 });

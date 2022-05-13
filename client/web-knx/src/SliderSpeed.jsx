@@ -52,7 +52,10 @@ export default class SliderSpeed extends React.Component {
   render() {
     return (
       <Stack style={{marginInline : "20%"}}
-      spacing={2} direction="column" sx={{ mb: 1 }} alignItems="center">
+      spacing={2} 
+      direction="column" 
+      sx={{ mb: 1 }} 
+      alignItems="center">
         
           <h1>{this.state.button.nameButton}</h1>
         

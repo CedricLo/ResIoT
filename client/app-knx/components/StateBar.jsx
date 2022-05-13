@@ -18,12 +18,13 @@ export default class StateBar extends React.Component {
     return (
       <View style={{
         flexDirection: "row",
-        
+        justifyContent : "space-around"
       }}>
         <Icon.Button 
         name="lightbulb-o"
         color={this.props.lamps[0] ? "yellow" : "black"}
-        size={50}
+        backgroundColor={"#0971f1"}
+        size={75}
         onPress={()=> {
           this.props.setLampStatus(1,!this.lamps[0])
           this.props.httpPost({ 'lamp': 1, 'lampState' : this.lamps[0]})
@@ -32,7 +33,8 @@ export default class StateBar extends React.Component {
         <Icon.Button 
         name="lightbulb-o"
         color={this.props.lamps[1] ? "yellow" : "black"}
-        size={50}
+        backgroundColor={"#0971f1"}
+        size={75}
         onPress={()=> {this.props.setLampStatus(2,!this.lamps[1])
           this.props.httpPost({ 'lamp': 2, 'lampState' : this.lamps[1]})
         }}>
@@ -40,7 +42,8 @@ export default class StateBar extends React.Component {
         <Icon.Button 
         name="lightbulb-o"
         color={this.props.lamps[2] ? "yellow" : "black"}
-        size={50}
+        backgroundColor={"#0971f1"}
+        size={75}
         onPress={()=> {this.props.setLampStatus(3,!this.lamps[2])
           this.props.httpPost({ 'lamp': 3, 'lampState' : this.lamps[2]})
         }}>
@@ -48,7 +51,8 @@ export default class StateBar extends React.Component {
         <Icon.Button 
         name="lightbulb-o"
         color={this.props.lamps[3] ? "yellow" : "black"}
-        size={50}
+        backgroundColor={"#0971f1"}
+        size={75}
         onPress={()=> {this.props.setLampStatus(4,!this.lamps[3])
           this.props.httpPost({ 'lamp': 4, 'lampState' : this.lamps[3]})
         }}>
