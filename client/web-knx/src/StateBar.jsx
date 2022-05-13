@@ -14,7 +14,7 @@ export default class StateBar extends React.Component {
 
   render() {
     this.getEtat();
-    console.log('LAMPS' ,this.lamps)
+    console.log('ETAT',this.etat);
     return (
       <Stack direction={'row'}>
         <IconContext.Provider value={{ color: this.lamps[0] ? "yellow" : "black", size : '12em', className: "global-class-name"}}>

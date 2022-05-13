@@ -40,16 +40,21 @@ export default class SliderSpeed extends React.Component {
   ralentirChenillard() {
     if (this.props.vitesse > 0) {
       const vitesse = this.props.vitesse - 1;
-      this.vitesseChange(vitesse);
+      this.vitesseChange(vitesse,true);
     }
     console.log(this.props.vitesse);
   }
 
   onChange =( event)=>{
-    this.vitesseChange(event.target.value)
+    this.vitesseChange(event.target.value);
+  }
+
+  getVitesse(){
+    this.vitesse = this.props.vitesse;
   }
 
   render() {
+    this.getVitesse();
     return (
       <Stack style={{marginInline : "20%"}}
       spacing={2} direction="column" sx={{ mb: 1 }} alignItems="center">
@@ -59,7 +64,7 @@ export default class SliderSpeed extends React.Component {
           <Slider 
             aria-label="Vitesse" 
             value={this.props.vitesse} 
-            onChange={this.onChange} 
+            onChange={this.onChange}
             color = "primary" 
             size = "medium"/>
           

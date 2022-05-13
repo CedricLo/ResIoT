@@ -2,13 +2,17 @@ const knx = require('knx');
 const exitHook = require('async-exit-hook');
 const readline = require('readline');
 const { stdin: input, stdout: output, exit, stderr, mainModule } = require('process');
-const { resolve } = require('path');
-const { rejects } = require('assert');
+
+var knxLog = require('debug')('knxLog');
+var speedLog = require('debug')('speedLog');
+var lampLog = require('debug')('lampLog');
+
 
 var wssLoc;
 var intervalRoutineID;
 var chenillardState = false;
 var speed;
+var relativeSpeed=1;
 var sens;
 
 
@@ -42,7 +46,7 @@ var connection = new knx.Connection({
         //connection.read("1/0/1", (src, responsevalue) => { ... });
       },
       // get notified for all KNX events:
-      event: function(evt, src, dest, value) { console.log(
+      event: function(evt, src, dest, value) { knxLog(
           "event: %s, src: %j, dest: %j, value: %j",
           evt, src, dest, value
         );
@@ -56,93 +60,98 @@ var connection = new knx.Connection({
 
 
 var light1 = new knx.Devices.BinarySwitch({ ga: '0/0/1', status_ga: '0/0/1' }, connection);
-console.log("The current light status is %j", light1.status.current_value);
+knxLog("The current light status is %j", light1.status.current_value);
 light1.control.on('change', function (oldvalue, newvalue) {
-    console.log("**** LIGHT 1 control changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** LIGHT 1 control changed from: %j to: %j", oldvalue, newvalue);
 });
 light1.status.on('change', function (oldvalue, newvalue) {
-    console.log("**** LIGHT 1 status changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** LIGHT 1 status changed from: %j to: %j", oldvalue, newvalue);
 });
 
 var light2 = new knx.Devices.BinarySwitch({ ga: '0/0/2', status_ga: '0/1/2' }, connection);
-console.log("The current light status is %j", light2.status.current_value);
+knxLog("The current light status is %j", light2.status.current_value);
 light2.control.on('change', function (oldvalue, newvalue) {
-    console.log("**** LIGHT 2 control changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** LIGHT 2 control changed from: %j to: %j", oldvalue, newvalue);
 });
 light2.status.on('change', function (oldvalue, newvalue) {
-    console.log("**** LIGHT 2 status changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** LIGHT 2 status changed from: %j to: %j", oldvalue, newvalue);
 });
 
 var light3 = new knx.Devices.BinarySwitch({ ga: '0/0/3', status_ga: '0/1/3' }, connection);
-console.log("The current light status is %j", light3.status.current_value);
+knxLog("The current light status is %j", light3.status.current_value);
 light3.control.on('change', function (oldvalue, newvalue) {
-    console.log("**** LIGHT 3 control changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** LIGHT 3 control changed from: %j to: %j", oldvalue, newvalue);
 });
 light3.status.on('change', function (oldvalue, newvalue) {
-    console.log("**** LIGHT 3 status changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** LIGHT 3 status changed from: %j to: %j", oldvalue, newvalue);
 });
 
 var light4 = new knx.Devices.BinarySwitch({ ga: '0/0/4', status_ga: '0/1/4' }, connection);
-console.log("The current light status is %j", light4.status.current_value);
+knxLog("The current light status is %j", light4.status.current_value);
 light4.control.on('change', function (oldvalue, newvalue) {
-    console.log("**** LIGHT 4 control changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** LIGHT 4 control changed from: %j to: %j", oldvalue, newvalue);
 });
 light4.status.on('change', function (oldvalue, newvalue) {
-    console.log("**** LIGHT 4 status changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** LIGHT 4 status changed from: %j to: %j", oldvalue, newvalue);
 });
 
 
 var button1 = new knx.Devices.BinarySwitch({ ga: '1/0/1', status_ga: '1/1/1' }, connection);
-console.log("The current button status is %j", light1.status.current_value);
+knxLog("The current button status is %j", light1.status.current_value);
 button1.control.on('change', function (oldvalue, newvalue) {
-
-
     let oldvalueParsed = JSON.parse(JSON.stringify(oldvalue));
     let newvalueParsed = JSON.parse(JSON.stringify(newvalue));
-    console.log("**** BUTTON 1 control changed from:", oldvalueParsed, " to", newvalueParsed);
-    if (newvalueParsed) {
-        intervalRoutineID = routineSpeed(50, chenillardSens1, intervalRoutineID)
-    } else {
-        //chenillardStop(intervalRoutineID);
+    knxLog("**** BUTTON 1 control changed from:", oldvalueParsed, " to", newvalueParsed);
+    if(newvalueParsed){
+        if (!chenillardState) {
+            chenillardStartIn(1,wssLoc);
+        } else {
+            chenillardStopIn(wssLoc);
+        }
     }
-
-
 });
 button1.status.on('change', function (oldvalue, newvalue) {
-    console.log("**** BUTTON 1 status changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** BUTTON 1 status changed from: %j to: %j", oldvalue, newvalue);
 });
 
 var button2 = new knx.Devices.BinarySwitch({ ga: '1/0/2', status_ga: '1/1/2' }, connection);
-console.log("The current button status is %j", light2.status.current_value);
+knxLog("The current button status is %j", light2.status.current_value);
 button2.control.on('change', function (oldvalue, newvalue) {
     let oldvalueParsed = JSON.parse(JSON.stringify(oldvalue));
     let newvalueParsed = JSON.parse(JSON.stringify(newvalue));
-    console.log("**** BUTTON 1 control changed from:", oldvalueParsed, " to", newvalueParsed);
+    knxLog("**** BUTTON 1 control changed from:", oldvalueParsed, " to", newvalueParsed);
     if (newvalueParsed) {
-        chenillardStop(intervalRoutineID);
+
     }
 });
-light2.status.on('change', function (oldvalue, newvalue) {
-    console.log("**** BUTTON 2 status changed from: %j to: %j", oldvalue, newvalue);
+button2.status.on('change', function (oldvalue, newvalue) {
+    knxLog("**** BUTTON 2 status changed from: %j to: %j", oldvalue, newvalue);
 });
 
 var button3 = new knx.Devices.BinarySwitch({ ga: '1/0/3', status_ga: '1/1/3' }, connection);
-console.log("The current button status is %j", light3.status.current_value);
+knxLog("The current button status is %j", light3.status.current_value);
 button3.control.on('change', function (oldvalue, newvalue) {
-    console.log("**** BUTTON 3 control changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** BUTTON 3 control changed from: %j to: %j", oldvalue, newvalue);
+    let newvalueParsed = JSON.parse(JSON.stringify(newvalue));
+    if(newvalueParsed){
+        decSpeed();
+    }
 });
 button3.status.on('change', function (oldvalue, newvalue) {
-    console.log("**** BUTTON 3 status changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** BUTTON 3 status changed from: %j to: %j", oldvalue, newvalue);
 });
 
 var button4 = new knx.Devices.BinarySwitch({ ga: '1/0/4', status_ga: '1/1/4' }, connection);
-console.log("The current button status is %j", light4.status.current_value);
-light4.control.on('change', function (oldvalue, newvalue) {
-    console.log("**** BUTTON 4 control changed from: %j to: %j", oldvalue, newvalue);
-
+knxLog("The current button status is %j", light4.status.current_value);
+button4.control.on('change', function (oldvalue, newvalue) {
+    knxLog("**** BUTTON 4 control changed from: %j to: %j", oldvalue, newvalue);
+    let newvalueParsed = JSON.parse(JSON.stringify(newvalue));
+    if(newvalueParsed){
+        incSpeed();
+    }
 });
 button4.status.on('change', function (oldvalue, newvalue) {
-    console.log("**** BUTTON 4 status changed from: %j to: %j", oldvalue, newvalue);
+    knxLog("**** BUTTON 4 status changed from: %j to: %j", oldvalue, newvalue);
 });
 
 function allumerL(lamp) {
@@ -170,6 +179,46 @@ setTimeout(() => {
 }, 3000);
 
 
+function chenillardStopIn(wss) {
+    chenillardState = false;
+    wssLoc = wss;
+    broadcast({'state' : false});
+}
+
+
+function chenillardStartIn(newSpeed, wss) {
+    wssLoc = wss;
+    if (newSpeed == undefined || newSpeed == 0) newSpeed = 1
+    if (sens == undefined) sens = true;
+    chenillardState = true;
+    speed = (101 - newSpeed) * 10 + 100;
+    broadcast({'state' : true});
+    chenillardSens1(1);       //routineSpeed(speed, chenillardSens1)   
+}
+
+function chenillardSpeedIn(newSpeed, wss) {
+    wssLoc = wss;
+    if (newSpeed == 0) newSpeed = 1;
+    relativeSpeed = newSpeed;
+    speed = (101 - newSpeed) * 10 + 100;
+    broadcast({'speed' : newSpeed});
+}
+
+function incSpeed(){
+    if(relativeSpeed + 20 >= 100){
+        relativeSpeed = 100
+    }
+    else relativeSpeed = relativeSpeed + 20;
+    chenillardSpeedIn(relativeSpeed,wssLoc);
+}
+
+function decSpeed(){
+    if(relativeSpeed - 20 <= 0){
+        relativeSpeed = 0
+    }
+    else relativeSpeed = relativeSpeed - 20;
+    chenillardSpeedIn(relativeSpeed,wssLoc);
+}
 
 
 module.exports = {
@@ -177,25 +226,16 @@ module.exports = {
         wssLoc = wss;
     },
 
-    chenillardStart: function (newSpeed, wss) {
-        wssLoc = wss;
-        if (newSpeed == undefined || newSpeed == 0) newSpeed = 1
-        if (sens == undefined) sens = true;
-        chenillardState = true;
-        speed = (101 - newSpeed) * 10 + 100;
-        chenillardSens1(1);       //routineSpeed(speed, chenillardSens1)
-        
+    chenillardStart : function(newSpeed,wss){
+        chenillardStartIn(newSpeed,wss);
     },
 
     chenillardSpeed: function (newSpeed, wss) {
-        wssLoc = wss;
-        if (newSpeed == 0) newSpeed = 1;
-        speed = (101 - newSpeed) * 10 + 100;
+        chenillardSpeedIn(newSpeed,wss);
     },
 
     chenillardStop: function (wss) {
-        chenillardState = false;
-        wssLoc = wss;
+        chenillardStopIn(wss);
     },
 
     chenillardSetSens() {
@@ -203,7 +243,7 @@ module.exports = {
     },
 
     allumerLamp: function (lamp) {
-        switch (lamp) {
+        switch (String(lamp)) {
             case '1':
                 allumerL1();
                 break;
@@ -220,7 +260,7 @@ module.exports = {
     },
 
     eteindreLamp: function (lamp) {
-        switch (lamp) {
+        switch (String(lamp)) {
             case '1':
                 eteindreL1();
                 break;
@@ -306,7 +346,7 @@ function verifEtat(addressObjet) {
 
 function chenillardSens1(n) {
     if (chenillardState) {
-        console.log(speed)
+        speedLog(speed)
         if (sens) {
             setTimeout(() => {
                 switch (n) {
@@ -369,6 +409,7 @@ function chenillardSens1(n) {
 }
 
 function broadcast(data) {
+    console.log('SENT',data);
     wssLoc.clients.forEach(function each(client) {
         client.send(JSON.stringify(data));
     });
@@ -376,44 +417,44 @@ function broadcast(data) {
 
 function allumerL1() {
     allumerL(light1);
-    console.log("lampe 1 allumée ");
+    lampLog("lampe 1 allumée ");
     broadcast({ 'lamp': 1, 'lampState': true })
 
 }
 function allumerL2() {
     allumerL(light2);
-    console.log("lampe 2 allumée ");
+    lampLog("lampe 2 allumée ");
     broadcast({ 'lamp': 2, 'lampState': true })
 }
 function allumerL3() {
     allumerL(light3);
-    console.log("lampe 3 allumée ");
+    lampLog("lampe 3 allumée ");
     broadcast({ 'lamp': 3, 'lampState': true })
 }
 function allumerL4() {
     allumerL(light4);
-    console.log("lampe 4 allumée ");
+    lampLog("lampe 4 allumée ");
     broadcast({ 'lamp': 4, 'lampState': true })
 }
 
 function eteindreL1() {
     eteindreL(light1);
-    console.log("lampe 1 éteinte ");
+    lampLog("lampe 1 éteinte ");
     broadcast({ 'lamp': 1, 'lampState': false })
 }
 function eteindreL2() {
     eteindreL(light2);
-    console.log("lampe 2 éteinte ");
+    lampLog("lampe 2 éteinte ");
     broadcast({ 'lamp': 2, 'lampState': false })
 }
 function eteindreL3() {
     eteindreL(light3);
-    console.log("lampe 3 éteinte ");
+    lampLog("lampe 3 éteinte ");
     broadcast({ 'lamp': 3, 'lampState': false })
 }
 function eteindreL4() {
     eteindreL(light4);
-    console.log("lampe 4 éteinte ");
+    lampLog("lampe 4 éteinte ");
     broadcast({ 'lamp': 4, 'lampState': false })
 }
 

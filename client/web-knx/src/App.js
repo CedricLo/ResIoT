@@ -39,7 +39,7 @@ export default class App extends Component {
     }
   };
 
-  changeEtat(etat) {
+  changeEtat(etat,boolean) {
     this.setState({
       chenillard: {
         stateChenillard: etat,
@@ -49,11 +49,11 @@ export default class App extends Component {
       }
     });
     //client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
-    this.httpPost({ 'state': !this.state.chenillard.stateChenillard });
+    if(boolean) this.httpPost({ 'state': !this.state.chenillard.stateChenillard });
     //console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
   }
 
-  changeVitesse(vit) {
+  changeVitesse(vit,boolean) {
     this.setState({
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
@@ -63,7 +63,7 @@ export default class App extends Component {
       }
     });
     //client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
-    this.httpPost({ 'speed': this.state.chenillard.vitesse });
+    if(boolean) this.httpPost({ 'speed': this.state.chenillard.vitesse });
     //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
@@ -126,9 +126,11 @@ export default class App extends Component {
       let parsedMessage = JSON.parse(message.data);
       if (parsedMessage.state !== undefined) {
         console.log('Server responsed : State ' + parsedMessage.state);
+        this.changeEtat(parsedMessage.state,false);
       }
       else if (parsedMessage.speed !== undefined) {
         console.log('Server responsed : Speed ' + parsedMessage.speed);
+        this.changeVitesse(parsedMessage.speed,false);
       }
       else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
@@ -169,8 +171,8 @@ export default class App extends Component {
             <Grid item xs={6}>
               <ButtonAllumerEteindre
                 etat={this.state.chenillard.stateChenillard}
-                changeEtat={(etat) => {
-                  this.changeEtat(etat);
+                changeEtat={(etat,boolean) => {
+                  this.changeEtat(etat,boolean);
                 }}
               />
             </Grid>
@@ -183,7 +185,7 @@ export default class App extends Component {
             <Grid item xs={12}>
               <SliderSpeed
                 vitesse={this.state.chenillard.vitesse}
-                vitesseChange={(vit) => this.changeVitesse(vit)}
+                vitesseChange={(vit,boolean) => this.changeVitesse(vit,boolean)}
               />
             </Grid>
           </Grid>
