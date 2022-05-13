@@ -5,6 +5,8 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import ButtonAllumerEteindre from './components/ButtonAllumerEteindre';
 import ButtonDirection from './components/ButtonDirection';
 import SliderSpeed from './components/SliderSpeed';
+import StateBar from './components/StateBar';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 //const fetch = require('node-fetch');
 const wsLien = '://localhost:3030';
@@ -128,7 +130,17 @@ export default class App extends Component {
       }]}>
         <View style={styles.item}>
           <Text style={styles.titleApp}>
-            CONTROLE YOUR CHENILLARD</Text>
+          Paramètre ton chenillard</Text>
+        </View>
+        <View>
+        <View style= {styles.item}>
+            <StateBar etat={this.state.chenillard.stateChenillard}
+            lamps={this.state.chenillard.lamps}
+            setLampStatus={(n,b)=>this.setLampStatus(n,b)}
+            httpPost={(data)=> this.httpPost(data)}
+            ></StateBar>
+            
+          </View>
         </View>
         <View style = {styles.item}>
           <Text style={styles.title}>
@@ -185,13 +197,14 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 20,
     marginVertical: 8,
+    backgroundColor : "#053e85"
   },
   item: {
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 8,
-    backgroundColor : "orange",
+    backgroundColor : "#0971f1",
     alignItems: "center",
   },
   title: {
@@ -201,6 +214,7 @@ const styles = StyleSheet.create({
   titleApp: {
     fontSize: 32,
     alignItems: "center",
+    textAlign : "center",
     
   },
 });

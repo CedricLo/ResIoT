@@ -3,9 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { Slider, Text, Icon } from 'react-native-elements';
 
 
-
-
-
 export default class SliderSpeed extends React.Component {
   vitesse = this.props.vitesse;
   vitesseChange = this.props.vitesseChange;

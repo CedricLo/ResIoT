@@ -26,7 +26,11 @@ export default class ButtonDirection extends React.Component {
 
   render() {
     return (
-      <Button style={{marginTop : 0.08*window.innerHeight, marginLeft : 0.08*window.innerWidth}}variant="contained" onClick={() => this.changerSensChenillard()}>
+      <Button style={
+        {marginTop : 0.08*window.innerHeight,
+         marginLeft : 0.08*window.innerWidth}}
+         variant="contained"
+         onClick={() => this.changerSensChenillard()}>
         {this.state.button.nameButton}
       </Button>
     );
