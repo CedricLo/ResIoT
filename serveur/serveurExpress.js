@@ -7,7 +7,7 @@ const { client } = require('websocket');
 const WebSocketServer = require('ws');
  //127.0.0.1
 const cors = require('cors')
-const wsAddress = "http://localhost:3030"
+const wsAddress = "http://192.168.0.111:3030"
 
 const knxServer = require("./serveur-knx")
 
@@ -93,7 +93,7 @@ app.get('/', (req, res) => {
 var server = app.listen(8080, function () {
     var host = server.address().address
     var port = server.address().port
-    console.log("Listening at http://%s:%s", host, port)
+    console.log(`Listening at http://${host}:${port}`)
 })
 
  server.on('upgrade', function (_, socket){

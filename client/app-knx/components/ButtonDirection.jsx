@@ -23,14 +23,19 @@ export default class ButtonDirection extends React.Component {
     } else {
       this.changeSens(versDroite);
     }
-    console.log(this.props.sens);
   }
 
 
   render() {
     return (
       <View>
-        <Button onPress={() => this.changerSensChenillard()}
+        <Button style={
+          {
+            marginTop : 0.08*window.innerHeight,
+            marginLeft : 0.08*window.innerWidth
+          }}
+          variant="contained" 
+        onPress={() => this.changerSensChenillard()}
         title={this.state.button.nameButton}/>
  
       </View>

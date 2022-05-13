@@ -37,7 +37,7 @@ export default class ButtonAllumerEteindre extends React.Component {
     return (
       <View style={styles.container}>
       
-        <Text>{this.state.button.nameButton}</Text>
+        <Text style={styles.componentStyle}>{this.state.button.nameButton}</Text>
 
         <Switch 
           trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -56,5 +56,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center"
+  },
+  componentStyle : {
+    textAlign: "center",
+    color: "white",
+    margin: 0,
   }
+  
 })
