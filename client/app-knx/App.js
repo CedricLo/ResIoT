@@ -10,11 +10,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 //const fetch = require('node-fetch');
 const wsLien = '://192.168.0.111:3030';
-
 //const httpLien = 'https'+lien+ '/home';
 const httpLien = 'http://192.168.0.111:8080/home';
 const client = new W3CWebSocket('ws' + wsLien);
-
 export default class App extends Component {
   state = {
     chenillard: {
@@ -38,17 +36,17 @@ export default class App extends Component {
     //console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
   }
 
-  changeVitesse(vit) {
+  changeVitesse(vit,boolean) {
     this.setState({
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
         sens: this.state.chenillard.sens,
         vitesse: vit,
-        lamps: this.state.chenillard.lamps
+        lamps : this.state.chenillard.lamps
       }
     });
     //client.send(JSON.stringify({'speed' : this.state.chenillard.vitesse}));
-    this.httpPost({ 'speed': this.state.chenillard.vitesse });
+    if(boolean) this.httpPost({ 'speed': this.state.chenillard.vitesse });
     //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
@@ -177,7 +175,7 @@ export default class App extends Component {
         <View style={styles.item}>
           <SliderSpeed
             vitesse={this.state.chenillard.vitesse}
-            vitesseChange={(vit) => this.changeVitesse(vit)}
+            vitesseChange={(vit,boolean) => this.changeVitesse(vit,boolean)}
 
           />
 

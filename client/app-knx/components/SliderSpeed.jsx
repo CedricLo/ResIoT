@@ -26,7 +26,7 @@ export default class SliderSpeed extends React.Component {
   accelererChenillard() {
     if (this.props.vitesse < 5) {
       const vitesse = this.props.vitesse + 1;
-      this.vitesseChange(vitesse);
+      this.vitesseChange(vitesse,true);
     }
     console.log(this.props.vitesse);
   }
@@ -34,7 +34,7 @@ export default class SliderSpeed extends React.Component {
   ralentirChenillard() {
     if (this.props.vitesse > 0) {
       const vitesse = this.props.vitesse - 1;
-      this.vitesseChange(vitesse);
+      this.vitesseChange(vitesse,true);
     }
     console.log(this.props.vitesse);
   }
@@ -42,8 +42,12 @@ export default class SliderSpeed extends React.Component {
   onChange =( value)=>{
     this.vitesseChange(value)
   }
+  getVitesse(){
+    this.vitesse = this.props.vitesse;
+  }
 
   render() {
+    this.getVitesse();
     return (
       <View style={styles.contentView}> 
           <Text style={styles.componentTitle}>{this.state.button.nameButton}</Text>
