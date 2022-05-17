@@ -12,16 +12,6 @@ export default class SliderSpeed extends React.Component {
     }
   };
  
-  interpolate = (start, end) => {
-    let k = (this.vitesse - 0) / 10; // 0 =>min  && 10 => MAX
-    return Math.ceil((1 - k) * start + k * end) % 256;
-  };
-  color = () => {
-    let r = this.interpolate(255, 0);
-    let g = this.interpolate(0, 255);
-    let b = this.interpolate(0, 0);
-    return `rgb(${r},${g},${b})`;
-  };
 
   accelererChenillard() {
     if (this.props.vitesse < 5) {

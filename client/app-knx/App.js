@@ -9,9 +9,9 @@ import StateBar from './components/StateBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 //const fetch = require('node-fetch');
-const wsLien = '://192.168.0.111:3030';
+const wsLien = '://192.168.0.108:3030';
 //const httpLien = 'https'+lien+ '/home';
-const httpLien = 'http://192.168.0.111:8080/home';
+const httpLien = 'http://192.168.0.108:8080/home';
 const client = new W3CWebSocket('ws' + wsLien);
 export default class App extends Component {
   state = {
