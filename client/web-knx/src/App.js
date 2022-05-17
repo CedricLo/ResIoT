@@ -67,7 +67,7 @@ export default class App extends Component {
     //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
-  changeSens(sens, boolean) {
+  changeSens(sens,boolean) {
     this.setState({
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
@@ -159,16 +159,6 @@ export default class App extends Component {
             lamps={this.state.chenillard.lamps}
             setLampStatus={(n,b)=>this.setLampStatus(n,b)}
             httpPost={(data)=> this.httpPost(data)}/>
-            <Grid style={{marginTop : '15px'}} item xs={12}>
-              <div style={{color : "#D8DFEF", fontSize: 25, fontFamily : 'revert', display : 'flex', justifyContent : 'center'}}>
-                <div></div>{" etat : " +
-                  (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +
-                  " | vitesse : " +
-                  this.state.chenillard.vitesse +
-                  " | sens : " +
-                  this.state.chenillard.sens}
-              </div>
-            </Grid>
             <Grid item xs={6}>
               <ButtonAllumerEteindre
                 etat={this.state.chenillard.stateChenillard}
