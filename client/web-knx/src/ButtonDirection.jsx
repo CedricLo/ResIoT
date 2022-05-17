@@ -17,9 +17,9 @@ export default class ButtonDirection extends React.Component {
     const versDroite = "droite";
 
     if (this.props.sens === versDroite) {
-      this.changeSens(versGauche);
+      this.changeSens(versGauche, true);
     } else {
-      this.changeSens(versDroite);
+      this.changeSens(versDroite, true);
     }
   }
 

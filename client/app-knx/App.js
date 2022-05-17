@@ -50,7 +50,7 @@ export default class App extends Component {
     //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
-  changeSens(sens) {
+  changeSens(sens, boolean) {
     this.setState({
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
@@ -60,7 +60,7 @@ export default class App extends Component {
       }
     });
     //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
-    this.httpPost({ 'sens': this.state.chenillard.sens });
+    if(boolean) this.httpPost({ 'sens': this.state.chenillard.sens });
   }
 
   /**
@@ -113,6 +113,7 @@ export default class App extends Component {
       }
       else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
+        this.changeSens(parsedMessage.sens,false);
       }
       else if(parsedMessage.lamp !== undefined) {
         this.setLampStatus(parsedMessage.lamp,parsedMessage.lampState)
@@ -171,7 +172,7 @@ export default class App extends Component {
           <View style={styles.item}>
             <ButtonDirection
               sens={this.state.chenillard.sens}
-              sensChange={(sens) => this.changeSens(sens)}
+              sensChange={(sens, boolean) => this.changeSens(sens, boolean)}
             />
           </View>
         </View>

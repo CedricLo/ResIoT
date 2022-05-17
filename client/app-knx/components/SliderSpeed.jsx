@@ -43,7 +43,7 @@ export default class SliderSpeed extends React.Component {
           <Text style={styles.componentTitle}>{this.state.button.nameButton}</Text>
           <Slider
           value={this.props.vitesse}
-          onValueChange={this.onChange()}
+          onValueChange={this.onChange}
           maximumValue={100}
           minimumValue={0}
           step={1}

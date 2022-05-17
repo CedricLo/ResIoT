@@ -48,8 +48,8 @@ export default class ButtonAllumerEteindre extends React.Component {
           trackColor={{ false: "#767577", true: "#81b0ff" }}
           thumbColor={this.props.etat ? "#f5dd4b" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={() => this.allumerChenillard(false)}
-          onClick={()=>this.allumerChenillard(true)}
+          onValueChange={() => this.allumerChenillard(true)}
+         
           value={this.props.etat}
          />
       </View>
