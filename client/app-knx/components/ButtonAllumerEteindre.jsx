@@ -52,7 +52,6 @@ export default class ButtonAllumerEteindre extends React.Component {
           onClick={()=>this.allumerChenillard(true)}
           value={this.props.etat}
          />
-        
       </View>
     );
   }

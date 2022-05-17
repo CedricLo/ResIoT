@@ -8,7 +8,7 @@ export default class ButtonDirection extends React.Component {
   changeSens = this.props.sensChange;
   state = {
     button: {
-      nameButton: "Changer la direction"
+      nameButton: "Changer la routine"
     }
   };
 

@@ -10,7 +10,7 @@ export default class ButtonDirection extends React.Component {
 
   state = {
     button: {
-      nameButton: "Changer la direction"
+      nameButton: "Changer la routine"
     }
   };
 

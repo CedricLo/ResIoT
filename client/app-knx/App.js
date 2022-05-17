@@ -22,7 +22,7 @@ export default class App extends Component {
       lamps: [false, false, false, false]
     }
   };
-  changeEtat(etat) {
+  changeEtat(etat,boolean) {
     this.setState({
       chenillard: {
         stateChenillard: etat,
@@ -32,7 +32,7 @@ export default class App extends Component {
       }
     });
     //client.send(JSON.stringify({'state' : !this.state.chenillard.stateChenillard}));
-    this.httpPost({ 'state': !this.state.chenillard.stateChenillard });
+    if(boolean) this.httpPost({ 'state': !this.state.chenillard.stateChenillard });
     //console.log("Post Etat : ",!this.state.chenillard.stateChenillard);
   }
 
@@ -162,8 +162,8 @@ export default class App extends Component {
           <View style={styles.item}>
             <ButtonAllumerEteindre
               etat={this.state.chenillard.stateChenillard}
-              changeEtat={(etat) => {
-                this.changeEtat(etat);
+              changeEtat={(etat,boolean) => {
+                this.changeEtat(etat,boolean);
               }}
             />
 
