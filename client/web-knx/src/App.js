@@ -14,9 +14,9 @@ import ButtonAllumerEteindre from './ButtonAllumerEteindre';
 import StateBar from './StateBar';
 
 //const fetch = require('node-fetch');
-const wsLien = '://192.168.0.108:3030';
+const wsLien = '://127.0.0.1:3030';
 //const httpLien = 'https'+lien+ '/home';
-const httpLien = 'http://192.168.0.108:8080/home';
+const httpLien = 'http://127.0.0.1:8080/home';
 const client = new W3CWebSocket('ws' + wsLien);
 
 
