@@ -134,6 +134,7 @@ export default class App extends Component {
       }
       else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
+        this.changeSens(parsedMessage.sens);
       }
       else if(parsedMessage.lamp !== undefined) {
         this.setLampStatus(parsedMessage.lamp,parsedMessage.lampState)
