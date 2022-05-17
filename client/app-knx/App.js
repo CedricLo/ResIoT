@@ -105,15 +105,17 @@ export default class App extends Component {
       let parsedMessage = JSON.parse(message.data);
       if (parsedMessage.state !== undefined) {
         console.log('Server responsed : State ' + parsedMessage.state);
+        this.changeEtat(parsedMessage.state,false);
       }
       else if (parsedMessage.speed !== undefined) {
         console.log('Server responsed : Speed ' + parsedMessage.speed);
+        this.changeVitesse(parsedMessage.speed,false);
       }
       else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
       }
-      else if (parsedMessage.lamp !== undefined) {
-        this.setLampStatus(parsedMessage.lamp, parsedMessage.lampState)
+      else if(parsedMessage.lamp !== undefined) {
+        this.setLampStatus(parsedMessage.lamp,parsedMessage.lampState)
       }
       else {
         console.log(`Unrecognized message`)
@@ -142,13 +144,14 @@ export default class App extends Component {
           </View>
         </View>
         <View style={styles.item}>
+
           <Text style={styles.title}>
             Chenillard :{" "}
             {" etat : " +
               (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +
-              ", \n vitesse : " +
+              " \n| vitesse : " +
               this.state.chenillard.vitesse +
-              ", \n sens : " +
+              " | sens : " +
               this.state.chenillard.sens}</Text>
         </View>
 

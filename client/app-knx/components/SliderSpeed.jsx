@@ -30,12 +30,8 @@ export default class SliderSpeed extends React.Component {
   }
 
   onChange =( value)=>{
-    this.vitesseChange(value)
+    this.vitesseChange(value,true)
   }
-  getVitesse(){
-    this.vitesse = this.props.vitesse;
-  }
-
   getVitesse(){
     this.vitesse = this.props.vitesse;
   }
