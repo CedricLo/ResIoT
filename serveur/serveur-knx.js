@@ -18,7 +18,7 @@ var sens;
 
 var connection = new knx.Connection({
     // ip address and port of the KNX router or interface
-    ipAddr: '192.168.0.201', ipPort: 3671,
+    ipAddr: '192.168.0.202', ipPort: 3671,
     
     // the KNX physical address we'd like to use
     physAddr: '15.15.15',
@@ -121,7 +121,7 @@ button2.control.on('change', function (oldvalue, newvalue) {
     let newvalueParsed = JSON.parse(JSON.stringify(newvalue));
     knxLog("**** BUTTON 1 control changed from:", oldvalueParsed, " to", newvalueParsed);
     if (newvalueParsed) {
-
+        chenillardSetSensIn();
     }
 });
 button2.status.on('change', function (oldvalue, newvalue) {
@@ -220,6 +220,10 @@ function decSpeed(){
     chenillardSpeedIn(relativeSpeed,wssLoc);
 }
 
+function chenillardSetSensIn() {
+    sens = !sens;
+}
+
 
 module.exports = {
     serveurKnxInit: function (wss) {
@@ -239,7 +243,7 @@ module.exports = {
     },
 
     chenillardSetSens() {
-        sens = !sens;
+        chenillardSetSensIn()
     },
 
     allumerLamp: function (lamp) {
