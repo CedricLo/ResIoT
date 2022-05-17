@@ -12,19 +12,19 @@ var wssLoc;
 var intervalRoutineID;
 var chenillardState = false;
 var speed;
-var relativeSpeed=1;
+var relativeSpeed = 1;
 var sens;
 
 
 var connection = new knx.Connection({
     // ip address and port of the KNX router or interface
-    ipAddr: '192.168.0.202', ipPort: 3671,
-    
+    ipAddr: '192.168.0.201', ipPort: 3671,
+
     // the KNX physical address we'd like to use
     physAddr: '15.15.15',
     // set the log level for messsages printed on the console. This can be 'error', 'warn', 'info' (default), 'debug', or 'trace'.
     loglevel: 'info',
-    
+
     // use tunneling with multicast (router) - this is NOT supported by all routers! See README-resilience.md
     forceTunneling: true,
     // wait at least 10 millisec between each datagram
@@ -35,28 +35,29 @@ var connection = new knx.Connection({
     localEchoInTunneling: false,
     // define your event handlers here:
     handlers: {
-      // wait for connection establishment before sending anything!
-      connected: function() {
-        console.log('Hurray, I can talk KNX!');
-        // WRITE an arbitrary boolean request to a DPT1 group address
-        connection.write("1/0/0", 1);
-        // you also WRITE to an explicit datapoint type, eg. DPT9.001 is temperature Celcius
-        connection.write("2/1/0", 22.5, "DPT9.001");
-        // you can also issue a READ request and pass a callback to capture the response
-        //connection.read("1/0/1", (src, responsevalue) => { ... });
-      },
-      // get notified for all KNX events:
-      event: function(evt, src, dest, value) { knxLog(
-          "event: %s, src: %j, dest: %j, value: %j",
-          evt, src, dest, value
-        );
-      },
-      // get notified on connection errors
-      error: function(connstatus) {
-        console.log("**** ERROR: %j", connstatus);
-      }
+        // wait for connection establishment before sending anything!
+        connected: function () {
+            console.log('Hurray, I can talk KNX!');
+            // WRITE an arbitrary boolean request to a DPT1 group address
+            connection.write("1/0/0", 1);
+            // you also WRITE to an explicit datapoint type, eg. DPT9.001 is temperature Celcius
+            connection.write("2/1/0", 22.5, "DPT9.001");
+            // you can also issue a READ request and pass a callback to capture the response
+            //connection.read("1/0/1", (src, responsevalue) => { ... });
+        },
+        // get notified for all KNX events:
+        event: function (evt, src, dest, value) {
+            knxLog(
+                "event: %s, src: %j, dest: %j, value: %j",
+                evt, src, dest, value
+            );
+        },
+        // get notified on connection errors
+        error: function (connstatus) {
+            console.log("**** ERROR: %j", connstatus);
+        }
     }
-  });
+});
 
 
 var light1 = new knx.Devices.BinarySwitch({ ga: '0/0/1', status_ga: '0/0/1' }, connection);
@@ -102,9 +103,9 @@ button1.control.on('change', function (oldvalue, newvalue) {
     let oldvalueParsed = JSON.parse(JSON.stringify(oldvalue));
     let newvalueParsed = JSON.parse(JSON.stringify(newvalue));
     knxLog("**** BUTTON 1 control changed from:", oldvalueParsed, " to", newvalueParsed);
-    if(newvalueParsed){
+    if (newvalueParsed) {
         if (!chenillardState) {
-            chenillardStartIn(1,wssLoc);
+            chenillardStartIn(1, wssLoc);
         } else {
             chenillardStopIn(wssLoc);
         }
@@ -133,7 +134,7 @@ knxLog("The current button status is %j", light3.status.current_value);
 button3.control.on('change', function (oldvalue, newvalue) {
     knxLog("**** BUTTON 3 control changed from: %j to: %j", oldvalue, newvalue);
     let newvalueParsed = JSON.parse(JSON.stringify(newvalue));
-    if(newvalueParsed){
+    if (newvalueParsed) {
         decSpeed();
     }
 });
@@ -146,7 +147,7 @@ knxLog("The current button status is %j", light4.status.current_value);
 button4.control.on('change', function (oldvalue, newvalue) {
     knxLog("**** BUTTON 4 control changed from: %j to: %j", oldvalue, newvalue);
     let newvalueParsed = JSON.parse(JSON.stringify(newvalue));
-    if(newvalueParsed){
+    if (newvalueParsed) {
         incSpeed();
     }
 });
@@ -182,17 +183,17 @@ setTimeout(() => {
 function chenillardStopIn(wss) {
     chenillardState = false;
     wssLoc = wss;
-    broadcast({'state' : false});
+    broadcast({ 'state': false });
 }
 
 
 function chenillardStartIn(newSpeed, wss) {
     wssLoc = wss;
     if (newSpeed == undefined || newSpeed == 0) newSpeed = 1
-    if (sens == undefined) sens = true;
+    if (sens == undefined) sens = 1;
     chenillardState = true;
     speed = (101 - newSpeed) * 10 + 100;
-    broadcast({'state' : true});
+    broadcast({ 'state': true });
     chenillardSens1(1);       //routineSpeed(speed, chenillardSens1)   
 }
 
@@ -201,27 +202,30 @@ function chenillardSpeedIn(newSpeed, wss) {
     if (newSpeed == 0) newSpeed = 1;
     relativeSpeed = newSpeed;
     speed = (101 - newSpeed) * 10 + 100;
-    broadcast({'speed' : newSpeed});
+    broadcast({ 'speed': newSpeed });
 }
 
-function incSpeed(){
-    if(relativeSpeed + 20 >= 100){
+function incSpeed() {
+    if (relativeSpeed + 20 >= 100) {
         relativeSpeed = 100
     }
     else relativeSpeed = relativeSpeed + 20;
-    chenillardSpeedIn(relativeSpeed,wssLoc);
+    chenillardSpeedIn(relativeSpeed, wssLoc);
 }
 
-function decSpeed(){
-    if(relativeSpeed - 20 <= 0){
+function decSpeed() {
+    if (relativeSpeed - 20 <= 0) {
         relativeSpeed = 0
     }
     else relativeSpeed = relativeSpeed - 20;
-    chenillardSpeedIn(relativeSpeed,wssLoc);
+    chenillardSpeedIn(relativeSpeed, wssLoc);
 }
 
 function chenillardSetSensIn() {
-    sens = !sens;
+    if (sens >= 6) {
+        sens = 1
+    }
+    else sens++
 }
 
 
@@ -230,12 +234,12 @@ module.exports = {
         wssLoc = wss;
     },
 
-    chenillardStart : function(newSpeed,wss){
-        chenillardStartIn(newSpeed,wss);
+    chenillardStart: function (newSpeed, wss) {
+        chenillardStartIn(newSpeed, wss);
     },
 
     chenillardSpeed: function (newSpeed, wss) {
-        chenillardSpeedIn(newSpeed,wss);
+        chenillardSpeedIn(newSpeed, wss);
     },
 
     chenillardStop: function (wss) {
@@ -243,7 +247,8 @@ module.exports = {
     },
 
     chenillardSetSens() {
-        chenillardSetSensIn()
+        chenillardSetSensIn();
+   
     },
 
     allumerLamp: function (lamp) {
@@ -338,70 +343,181 @@ function main() {
 
 }
 
-function verifEtat(addressObjet) {
+
+function routineSens1(n) {
+    setTimeout(() => {
+        switch (n) {
+            case 1:
+                eteindreL4();
+                allumerL1();
+                break;
+            case 2:
+                eteindreL1();
+                allumerL2();
+                break;
+            case 3:
+                eteindreL2();
+                allumerL3();
+                break;
+            case 4:
+                eteindreL3();
+                allumerL4();
+                break;
+        }
+        if (n >= 4) {
+            chenillardSens1(1)
+        }
+        else chenillardSens1(n + 1);
+    }, speed)
+}
+
+function routineSens2(n) {
+    setTimeout(() => {
+        switch (n) {
+            case 1:
+                eteindreL1();
+                allumerL4();
+                break;
+            case 2:
+                eteindreL4();
+                allumerL3();
+                break;
+            case 3:
+                eteindreL3();
+                allumerL2();
+                break;
+            case 4:
+                eteindreL2();
+                allumerL1();
+                break;
+        }
+        if (n >= 4) {
+            chenillardSens1(1)
+        }
+        else chenillardSens1(n + 1);
+    }, speed)
+}
+
+function routineSens3(n) {
+    setTimeout(() => {
+        switch (n) {
+
+            case 1:
+                eteindreL1();
+                allumerL2();
+                break;
+            case 2:
+                eteindreL2();
+                allumerL3();
+                break;
+            case 3:
+                eteindreL3();
+                allumerL4();
+                break;
+            case 4:
+                eteindreL4();
+                allumerL3();
+                break;
+            case 5:
+                eteindreL3();
+                allumerL2();
+                break;
+            case 6:
+                eteindreL2();
+                allumerL1();
+                break;
+        }
+        if (n >= 6) {
+            chenillardSens1(1)
+        }
+        else chenillardSens1(n + 1);
+    }, speed)
+}
+
+function routineSens4(n) {
+
+    setTimeout(() => {
+        if (n === 1) {
+            allumerL1();
+            allumerL2();
+            allumerL3();
+            allumerL4();
+
+        }
+        else {
+            eteindreL1();
+            eteindreL2();
+            eteindreL3();
+            eteindreL4();
+        }
+
+        if (n >= 2) {
+            chenillardSens1(1)
+        }
+        else chenillardSens1(n + 1);
+    }, speed)
 
 }
 
 
+function routineSens5(n) {
+    setTimeout(() => {
+        switch (n) {
 
+            case 1:
+                allumerL1();
+                allumerL4();
+                eteindreL2();
+                eteindreL3();
+                break;
+            case 2:
+                allumerL2();
+                allumerL3();
+                eteindreL1();
+                eteindreL4();
+                break;
+            case 3:
+                eteindreL3();
+                eteindreL2();
+                break;
+            case 4:
+                allumerL2();
+                allumerL3();
+                break;
 
-
+        }
+        if (n >= 4) {
+            chenillardSens1(1)
+        }
+        else chenillardSens1(n + 1);
+    }, speed)
+}
 
 
 function chenillardSens1(n) {
     if (chenillardState) {
         speedLog(speed)
-        if (sens) {
-            setTimeout(() => {
-                switch (n) {
-                    case 1:
-                        eteindreL4();
-                        allumerL1();
-                        break;
-                    case 2:
-                        eteindreL1();
-                        allumerL2();
-                        break;
-                    case 3:
-                        eteindreL2();
-                        allumerL3();
-                        break;
-                    case 4:
-                        eteindreL3();
-                        allumerL4();
-                        break;
-                }
-                if (n >= 4) {
-                    chenillardSens1(1)
-                }
-                else chenillardSens1(n + 1);
-            }, speed)
-        }
-        else {
-            setTimeout(() => {
-                switch (n) {
-                    case 1:
-                        eteindreL1();
-                        allumerL4();
-                        break;
-                    case 2:
-                        eteindreL4();
-                        allumerL3();
-                        break;
-                    case 3:
-                        eteindreL3();
-                        allumerL2();
-                        break;
-                    case 4:
-                        eteindreL2();
-                        allumerL1();
-                        break;
-                }
-                if (n >= 4) {
-                    chenillardSens1(1)
-                }
-                else chenillardSens1(n + 1);
-            }, speed)
+        console.log(sens)
+        switch (sens) {
+            case 1:
+                routineSens1(n);
+                break;
+            case 2:
+                routineSens2(n);
+                break;
+            case 3:
+                routineSens3(n);
+                break;
+            case 4:
+                routineSens4(n);
+                break;
+            case 5:
+                routineSens5(n);
+                break;
+            default:
+                sens = 1
+                routineSens1(n);
+                break;
         }
     }
     else {
@@ -413,7 +529,7 @@ function chenillardSens1(n) {
 }
 
 function broadcast(data) {
-    console.log('SENT',data);
+    console.log('SENT', data);
     wssLoc.clients.forEach(function each(client) {
         client.send(JSON.stringify(data));
     });

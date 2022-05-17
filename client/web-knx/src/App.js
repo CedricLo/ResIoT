@@ -67,7 +67,7 @@ export default class App extends Component {
     //console.log("Post Vitesse : ",this.state.chenillard.vitesse);
   }
 
-  changeSens(sens) {
+  changeSens(sens,boolean) {
     this.setState({
       chenillard: {
         stateChenillard: this.state.chenillard.stateChenillard,
@@ -77,7 +77,7 @@ export default class App extends Component {
       }
     });
     //client.send(JSON.stringify({'sens' : this.state.chenillard.sens}));
-    this.httpPost({ 'sens': this.state.chenillard.sens });
+    if(boolean) this.httpPost({ 'sens': this.state.chenillard.sens });
   }
 
   /**
@@ -134,7 +134,7 @@ export default class App extends Component {
       }
       else if (parsedMessage.sens !== undefined) {
         console.log('Server responsed : Sens ' + parsedMessage.sens);
-        this.changeSens(parsedMessage.sens);
+        this.changeSens(parsedMessage.sens,false);
       }
       else if(parsedMessage.lamp !== undefined) {
         this.setLampStatus(parsedMessage.lamp,parsedMessage.lampState)
@@ -159,16 +159,6 @@ export default class App extends Component {
             lamps={this.state.chenillard.lamps}
             setLampStatus={(n,b)=>this.setLampStatus(n,b)}
             httpPost={(data)=> this.httpPost(data)}/>
-            <Grid style={{marginTop : '15px'}} item xs={12}>
-              <div style={{color : "#D8DFEF", fontSize: 25, fontFamily : 'revert', display : 'flex', justifyContent : 'center'}}>
-                <div></div>{" etat : " +
-                  (this.state.chenillard.stateChenillard ? "allumé" : "éteind") +
-                  " | vitesse : " +
-                  this.state.chenillard.vitesse +
-                  " | sens : " +
-                  this.state.chenillard.sens}
-              </div>
-            </Grid>
             <Grid item xs={6}>
               <ButtonAllumerEteindre
                 etat={this.state.chenillard.stateChenillard}
@@ -180,7 +170,7 @@ export default class App extends Component {
             <Grid item xs={6}>
               <ButtonDirection
                 sens={this.state.chenillard.sens}
-                sensChange={(sens) => this.changeSens(sens)}></ButtonDirection>
+                sensChange={(sens,boolean) => this.changeSens(sens,boolean)}></ButtonDirection>
             </Grid>
 
             <Grid item xs={12}>
