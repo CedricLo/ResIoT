@@ -22,7 +22,7 @@ export default class ButtonAllumerEteindre extends React.Component {
     }
   };
 
-  allumerChenillard() {
+  allumerChenillard(boolean) {
     const allumer = "Allumer le chenillard";
     const eteindre = "Eteindre le chenillard";
     if (this.props.etat) {
@@ -30,10 +30,15 @@ export default class ButtonAllumerEteindre extends React.Component {
     } else {
       this.setState({ button: { nameButton: eteindre } });
     }
-    this.changeEtat(!this.props.etat);
+    this.changeEtat(!this.props.etat,boolean);
+  }
+
+  getEtat(){
+    this.etat = this.props.etat;
   }
 
   render() {
+    this.getEtat();
     return (
       <View style={styles.container}>
       
@@ -43,7 +48,8 @@ export default class ButtonAllumerEteindre extends React.Component {
           trackColor={{ false: "#767577", true: "#81b0ff" }}
           thumbColor={this.props.etat ? "#f5dd4b" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={() => this.allumerChenillard()}
+          onValueChange={() => this.allumerChenillard(true)}
+          
           value={this.props.etat}
          />
         
