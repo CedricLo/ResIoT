@@ -36,6 +36,10 @@ export default class SliderSpeed extends React.Component {
     this.vitesse = this.props.vitesse;
   }
 
+  getVitesse(){
+    this.vitesse = this.props.vitesse;
+  }
+
   render() {
     this.getVitesse();
     return (
