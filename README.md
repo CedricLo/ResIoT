@@ -2,22 +2,22 @@
 L'objectif de ce projet est de concevoir un moyen de controler le KNX avec yun navigateur web. Nous avons donc un serveur qu'il faut connecter au KNX et deux clients un sur téléphone mobile et l'autre sur page web qu'il faut connecter au serveur.
   
 ## Installer le projet:
-* cloner le projet :
+* cloner le projet :  
   `git clone git@github.com:CedricLo/ResIoT.git`
 
-* rentrer dans le projet : 
+* rentrer dans le projet :   
   `cd ResIoT`
   
-* intaller les dépendance du client mobile :
-  `cd ./client/app-knx`
-  `npm install`
+* intaller les dépendance du client mobile :  
+  `cd ./client/app-knx`  
+    `npm install`
 
-* installer les dépendances du client web : 
-  `cd ./client/web-knx`
-  `npm install`
+* installer les dépendances du client web :   
+  `cd ./client/web-knx`  
+    `npm install`
 
-* installer les dépendances du serveur : 
-  `cd ./serveur`
+* installer les dépendances du serveur :  
+  `cd ./serveur`  
   `npm install`
 
 ## Lancer le projet
