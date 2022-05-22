@@ -3,14 +3,16 @@ L'objectif de ce projet est de concevoir un moyen de controler le KNX avec yun n
   
 ## Installer le projet:
 * cloner le projet :  
-  `git clone git@github.com:CedricLo/ResIoT.git`
+  ```git clone git@github.com:CedricLo/ResIoT.git```
 
 * rentrer dans le projet :   
-  `cd ResIoT`
+  ```cd ResIoT```
   
 * intaller les dépendance du client mobile :  
-  `cd ./client/app-knx`  
-    `npm install`
+  ```
+  cd ./client/app-knx 
+  npm install
+  ```
 
 * installer les dépendances du client web :   
   `cd ./client/web-knx`  
